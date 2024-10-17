@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- ID Transaksi -->
+    <TextView
+        android:id="@+id/tvTransactionId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Transaction ID"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- ID Produk -->
+    <TextView
+        android:id="@+id/tvProductId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Product ID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTransactionId"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- ID Pelanggan -->
+    <TextView
+        android:id="@+id/tvCustomerId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Customer ID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvProductId"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Jumlah dan Total Harga -->
+    <TextView
+        android:id="@+id/tvTransactionDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Quantity: 0, Total: 0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCustomerId"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
