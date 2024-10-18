@@ -1,25 +1,23 @@
 package com.barleyan.managementoko
 
-
+import CustomerAdapter
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.AppViewModel
 import com.example.project.Customer
-import com.example.project.Product
-import com.example.project.Transaction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appViewModel: AppViewModel
+    lateinit var appViewModel: AppViewModel
     private lateinit var customerAdapter: CustomerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize adapter with empty list
-        customerAdapter = CustomerAdapter(emptyList())
+        customerAdapter = CustomerAdapter(mutableListOf())
         recyclerView.adapter = customerAdapter
 
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
@@ -48,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         fabAdd.setOnClickListener {
             showAddCustomerDialog() // Tampilkan dialog untuk menambah customer
         }
-
     }
 
     // Fungsi untuk menampilkan dialog penambahan customer baru
@@ -62,8 +59,8 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Tambah Client")
             .setView(dialogView)
-            .setPositiveButton("Tambah", DialogInterface.OnClickListener { dialog, which ->
-                // Ketika tombol "Add" ditekan, ambil input dan simpan data baru
+            .setPositiveButton("Tambah") { dialog, which ->
+                // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
                 val name = customerNameInput.text.toString()
                 val phoneNumber = customerPhoneInput.text.toString()
 
@@ -71,12 +68,15 @@ class MainActivity : AppCompatActivity() {
                     val newCustomer = Customer(name = name, phoneNumber = phoneNumber)
                     appViewModel.insertCustomer(newCustomer) // Menyimpan data ke ViewModel
                 }
-            })
-            .setNegativeButton("Cancel", null)
+            }
+            .setNegativeButton("Batal", null)
             .create()
             .show()
-
-
     }
 
+
+    // Fungsi untuk menghapus pelanggan dari ViewModel
+    fun deleteCustomer(customer: Customer) {
+        appViewModel.deleteCustomer(customer) // Memanggil fungsi delete di ViewModel
+    }
 }

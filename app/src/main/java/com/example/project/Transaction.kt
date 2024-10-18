@@ -9,6 +9,7 @@ data class Transaction(
     val productId: Int,
     val customerId: Int,
     val quantity: Int,
-    val totalPrice: Double
+    val totalPrice: Double,
+    val amount: Double
 )
 

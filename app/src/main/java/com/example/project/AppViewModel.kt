@@ -1,31 +1,42 @@
 package com.example.project
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AppViewModel : ViewModel() {
-
-    private val _allCustomers = MutableLiveData<List<Customer>>()
-    val allCustomers: LiveData<List<Customer>> get() = _allCustomers
-
-    private val customerList = mutableListOf<Customer>()
+class AppViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: Repository
+    val allCustomers: LiveData<List<Customer>>
+    val allProducts: LiveData<List<Product>>
+    val allTransactions: LiveData<List<Transaction>>
 
     init {
-        _allCustomers.value = customerList
+        val productDao = AppDatabase.getDatabase(application).productDao()
+        val customerDao = AppDatabase.getDatabase(application).customerDao()
+        val transactionDao = AppDatabase.getDatabase(application).transactionDao()
+        repository = Repository(productDao, customerDao, transactionDao)
+
+        allCustomers = repository.allCustomers
+        allProducts = repository.allProducts
+        allTransactions = repository.allTransactions
     }
 
-    fun insertCustomer(customer: Customer) {
-        customerList.add(customer)
-        _allCustomers.value = customerList // Memperbarui LiveData
+    fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertCustomer(customer)
     }
 
-    // Contoh metode untuk produk dan transaksi
-    fun insertProduct(product: Product) {
-        // Logika untuk menyimpan produk
+    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertProduct(product)
     }
 
-    fun insertTransaction(transaction: Transaction) {
-        // Logika untuk menyimpan transaksi
+    fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertTransaction(transaction)
+    }
+
+    fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(customer)
     }
 }

@@ -19,4 +19,14 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction)
     }
+
+    suspend fun delete(customer: Customer) {
+        customerDao.delete(customer)
+    }
+
+    companion object {
+        fun delete(customer: Customer) {
+
+        }
+    }
 }
