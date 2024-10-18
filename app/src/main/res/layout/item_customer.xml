@@ -30,9 +30,9 @@
 
     <ImageButton
         android:id="@+id/btnDeleteCustomer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="50dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/delete_customer"

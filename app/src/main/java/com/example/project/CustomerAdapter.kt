@@ -10,7 +10,8 @@ import com.barleyan.managementoko.MainActivity
 import com.barleyan.managementoko.R
 import com.example.project.Customer
 
-class CustomerAdapter(private var customerList: MutableList<Customer>) : RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
+class CustomerAdapter(private var customerList: MutableList<Customer>) :
+    RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
 
     // ViewHolder class
     inner class CustomerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,7 +21,8 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) : Recycle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_customer, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_customer, parent, false)
         return CustomerViewHolder(itemView)
     }
 
@@ -35,34 +37,32 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) : Recycle
         }
     }
 
-    override fun getItemCount(): Int {
-        return customerList.size
-    }
+    override fun getItemCount(): Int = customerList.size
 
     fun updateCustomers(newCustomers: List<Customer>) {
-        this.customerList.clear() // clear the existing list
-        this.customerList.addAll(newCustomers) // add all new customers
+        customerList.clear() // clear the existing list
+        customerList.addAll(newCustomers) // add all new customers
         notifyDataSetChanged()
     }
 
-    // Function to show delete confirmation dialog
+    // Show delete confirmation dialog
     private fun showDeleteConfirmationDialog(context: Context, customer: Customer, position: Int) {
         AlertDialog.Builder(context)
             .setTitle("Hapus Pelanggan")
             .setMessage("Anda yakin ingin menghapus ${customer.name}?")
-            .setPositiveButton("Ya") { dialog, which ->
+            .setPositiveButton("Ya") { _, _ ->
                 deleteCustomer(context, customer, position)
             }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    // Function to delete customer
+    // Delete customer and notify adapter
     private fun deleteCustomer(context: Context, customer: Customer, position: Int) {
-        // Panggil fungsi dari ViewModel untuk menghapus customer
+        // Call ViewModel function to delete customer
         (context as MainActivity).appViewModel.deleteCustomer(customer)
 
-        // Menghapus item dari daftar dan memberitahu adapter tentang perubahan
+        // Remove item from list and notify adapter of changes
         customerList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, customerList.size)
