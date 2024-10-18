@@ -34,4 +34,5 @@ class CustomerAdapter(private var customerList: List<Customer>) : RecyclerView.A
         val nameTextView: TextView = itemView.findViewById(R.id.tvCustomerName)
         val phoneTextView: TextView = itemView.findViewById(R.id.tvCustomerPhone)
     }
+
 }
