@@ -20,6 +20,7 @@ class AppViewModel : ViewModel() {
         _allCustomers.value = customerList // Memperbarui LiveData
     }
 
+
     // Contoh metode untuk produk dan transaksi
     fun insertProduct(product: Product) {
         // Logika untuk menyimpan produk

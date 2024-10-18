@@ -1,5 +1,6 @@
 package com.barleyan.managementoko
 
+import CustomerAdapter
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -29,11 +30,13 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Initialize adapter with empty list
-        customerAdapter = CustomerAdapter(emptyList())
-        recyclerView.adapter = customerAdapter
-
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
+
+        // Initialize adapter with delete functionality
+        customerAdapter = CustomerAdapter(emptyList()) { customer ->
+            showDeleteConfirmationDialog(customer) // Show confirmation dialog before deleting
+        }
+        recyclerView.adapter = customerAdapter
 
         // Observing data and updating UI
         appViewModel.allCustomers.observe(this, Observer { customers ->
@@ -42,39 +45,47 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Tombol FloatingActionButton untuk menambah data
+        // FloatingActionButton to add new customers
         val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
         fabAdd.setOnClickListener {
-            showAddCustomerDialog() // Tampilkan dialog untuk menambah customer
+            showAddCustomerDialog() // Display dialog to add customer
         }
-
     }
 
-    // Fungsi untuk menampilkan dialog penambahan customer baru
+    private fun showDeleteConfirmationDialog(customer: Customer) {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Customer")
+            .setMessage("Are you sure you want to delete ${customer.name}?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                appViewModel.deleteCustomer(customer) // Delete the customer
+                dialog.dismiss()
+            }
+            .setNegativeButton("No", null)
+            .create()
+            .show()
+    }
+
+    // Function to show add customer dialog (as before)
     private fun showAddCustomerDialog() {
-        // Inflating the layout untuk dialog
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_customer, null)
         val customerNameInput = dialogView.findViewById<EditText>(R.id.etName)
         val customerPhoneInput = dialogView.findViewById<EditText>(R.id.etPhone)
 
-        // Membuat dialog
         AlertDialog.Builder(this)
-            .setTitle("Tambah Client")
+            .setTitle("Add Customer")
             .setView(dialogView)
-            .setPositiveButton("Tambah", DialogInterface.OnClickListener { dialog, which ->
-                // Ketika tombol "Add" ditekan, ambil input dan simpan data baru
+            .setPositiveButton("Add") { dialog, _ ->
                 val name = customerNameInput.text.toString()
                 val phoneNumber = customerPhoneInput.text.toString()
 
                 if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
                     val newCustomer = Customer(name = name, phoneNumber = phoneNumber)
-                    appViewModel.insertCustomer(newCustomer) // Menyimpan data ke ViewModel
+                    appViewModel.insertCustomer(newCustomer) // Add the customer
                 }
-            })
+                dialog.dismiss()
+            }
             .setNegativeButton("Cancel", null)
             .create()
             .show()
-
     }
-
 }
