@@ -48,15 +48,6 @@ class MainActivity : AppCompatActivity() {
             showAddCustomerDialog() // Tampilkan dialog untuk menambah customer
         }
 
-        // Insert some sample data (optional)
-        val sampleCustomer = Customer(name = "NAMA", phoneNumber = "TELEPON")
-        appViewModel.insertCustomer(sampleCustomer)
-
-        val sampleProduct = Product(name = "Laptop", price = 15000.0, stock = 10)
-        appViewModel.insertProduct(sampleProduct)
-
-        val sampleTransaction = Transaction(productId = 1, customerId = 1, quantity = 1, totalPrice = 15000.0)
-        appViewModel.insertTransaction(sampleTransaction)
     }
 
     // Fungsi untuk menampilkan dialog penambahan customer baru
@@ -83,5 +74,7 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .create()
             .show()
+
     }
+
 }
