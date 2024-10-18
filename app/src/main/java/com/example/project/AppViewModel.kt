@@ -1,39 +1,31 @@
 package com.example.project
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-class AppViewModel(application: Application) : AndroidViewModel(application) {
+class AppViewModel : ViewModel() {
 
-    private val repository: Repository
+    private val _allCustomers = MutableLiveData<List<Customer>>()
+    val allCustomers: LiveData<List<Customer>> get() = _allCustomers
 
-    val allProducts: LiveData<List<Product>>
-    val allCustomers: LiveData<List<Customer>>
-    val allTransactions: LiveData<List<Transaction>>
+    private val customerList = mutableListOf<Customer>()
 
     init {
-        val productDao = AppDatabase.getDatabase(application).productDao()
-        val customerDao = AppDatabase.getDatabase(application).customerDao()
-        val transactionDao = AppDatabase.getDatabase(application).transactionDao()
-        repository = Repository(productDao, customerDao, transactionDao)
-
-        allProducts = repository.allProducts
-        allCustomers = repository.allCustomers
-        allTransactions = repository.allTransactions
+        _allCustomers.value = customerList
     }
 
-    fun insertProduct(product: Product) = viewModelScope.launch {
-        repository.insertProduct(product)
+    fun insertCustomer(customer: Customer) {
+        customerList.add(customer)
+        _allCustomers.value = customerList // Memperbarui LiveData
     }
 
-    fun insertCustomer(customer: Customer) = viewModelScope.launch {
-        repository.insertCustomer(customer)
+    // Contoh metode untuk produk dan transaksi
+    fun insertProduct(product: Product) {
+        // Logika untuk menyimpan produk
     }
 
-    fun insertTransaction(transaction: Transaction) = viewModelScope.launch {
-        repository.insertTransaction(transaction)
+    fun insertTransaction(transaction: Transaction) {
+        // Logika untuk menyimpan transaksi
     }
 }
