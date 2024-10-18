@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         appViewModel.allTransactions.observe(this, Observer { transactions ->
         })
+
 
         // Insert sample data
         val sampleProduct = Product(name = "Laptop", price = 15000.0, stock = 10)
