@@ -1,14 +1,17 @@
+package com.example.project
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.MainActivity
 import com.barleyan.managementoko.R
-import com.example.project.Customer
+
 
 class CustomerAdapter(private var customerList: MutableList<Customer>) :
     RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
@@ -18,6 +21,7 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         val customerName: TextView = view.findViewById(R.id.tvCustomerName)
         val customerPhone: TextView = view.findViewById(R.id.tvCustomerPhone)
         val btnDeleteCustomer: ImageButton = view.findViewById(R.id.btnDeleteCustomer)
+        val btnEditCustomer: ImageButton = view.findViewById(R.id.btnEditCustomer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerViewHolder {
@@ -34,6 +38,11 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         // Setup delete button functionality
         holder.btnDeleteCustomer.setOnClickListener {
             showDeleteConfirmationDialog(holder.itemView.context, customer, position)
+        }
+
+        // Setup edit button functionality
+        holder.btnEditCustomer.setOnClickListener {
+            showEditCustomerDialog(holder.itemView.context, customer, position)
         }
     }
 
@@ -57,6 +66,45 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
             .show()
     }
 
+    // Show edit customer dialog
+    private fun showEditCustomerDialog(context: Context, customer: Customer, position: Int) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Edit Pelanggan")
+
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.dialog_add_customer, null) // inflate the correct layout
+        builder.setView(dialogView)
+
+        val editName = dialogView.findViewById<EditText>(R.id.etName) // use correct IDs
+        val editPhone = dialogView.findViewById<EditText>(R.id.etPhone)
+
+        // Set current customer data in the EditText fields
+        editName.setText(customer.name)
+        editPhone.setText(customer.phoneNumber)
+
+        // Set dialog actions
+        builder.setPositiveButton("Simpan") { _, _ ->
+            val newName = editName.text.toString()
+            val newPhone = editPhone.text.toString()
+            updateCustomer(context, customer, position, newName, newPhone)
+        }
+        builder.setNegativeButton("Batal", null)
+
+        // Show the dialog
+        builder.show()
+    }
+
+    // Update customer details
+    private fun updateCustomer(context: Context, customer: Customer, position: Int, newName: String, newPhone: String) {
+        // Update customer data in ViewModel
+        customer.name = newName
+        customer.phoneNumber = newPhone
+        (context as MainActivity).appViewModel.updateCustomer(customer)
+
+        // Notify adapter of the change
+        notifyItemChanged(position)
+    }
+
     // Delete customer and notify adapter
     private fun deleteCustomer(context: Context, customer: Customer, position: Int) {
         // Call ViewModel function to delete customer
@@ -68,3 +116,4 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         notifyItemRangeChanged(position, customerList.size)
     }
 }
+

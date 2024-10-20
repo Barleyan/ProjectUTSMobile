@@ -39,4 +39,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(customer)
     }
+
+    fun updateCustomer(customer: Customer) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateCustomer(customer)
+        }
+    }
 }

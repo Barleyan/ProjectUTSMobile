@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface CustomerDao {
@@ -17,4 +18,7 @@ interface CustomerDao {
 
     @Delete
     suspend fun delete(customer: Customer)
+
+    @Update
+    suspend fun update(customer: Customer)
 }

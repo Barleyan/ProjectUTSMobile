@@ -3,4 +3,5 @@
     <string name="prev"><![CDATA[<]]></string>
     <string name="next"><![CDATA[>]]></string>
     <string name="delete_customer">Delete customer</string>
+    <string name="edit_customer">Edit Customer</string>
 </resources>
