@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.MainActivity
 import com.barleyan.managementoko.R
 
-
 class CustomerAdapter(private var customerList: MutableList<Customer>) :
     RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
 

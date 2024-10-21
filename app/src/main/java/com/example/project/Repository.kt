@@ -28,6 +28,7 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
         customerDao.update(customer)
     }
 
+
     companion object {
         fun delete(customer: Customer) {
 
