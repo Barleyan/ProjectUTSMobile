@@ -25,6 +25,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val nextButton = findViewById<Button>(R.id.nextID)
+        nextButton.setOnClickListener {
+            // Start the ProductCustomerActivity when Next is clicked
+            val intent = Intent(this, MainActivityProduct::class.java)
+            startActivity(intent)
+        }
+
 
         // Setup RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
