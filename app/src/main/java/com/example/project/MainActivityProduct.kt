@@ -15,12 +15,13 @@ import com.example.project.AppViewModel
 import com.example.project.Customer
 import com.example.project.CustomerAdapter
 import com.example.project.Product
+import com.example.project.ProductAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivityProduct : AppCompatActivity() {
 
     lateinit var appViewModel: AppViewModel
-    private lateinit var customerAdapter: CustomerAdapter
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,15 +40,15 @@ class MainActivityProduct : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize adapter with empty list
-        customerAdapter = CustomerAdapter(mutableListOf())
-        recyclerView.adapter = customerAdapter
+        productAdapter = ProductAdapter(mutableListOf())
+        recyclerView.adapter = productAdapter
 
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
         // Observing data and updating UI
-        appViewModel.allCustomers.observe(this, Observer { customers ->
-            customers?.let {
-                customerAdapter.updateCustomers(it) // Update RecyclerView with customer data
+        appViewModel.allProducts.observe(this, Observer { products ->
+            products?.let {
+                productAdapter.updateProducts(it) // Update RecyclerView with customer data
             }
         })
 

@@ -27,6 +27,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertCustomer(customer)
     }
+    fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(customer)
+    }
 
     fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertProduct(product)
@@ -36,10 +39,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.insertTransaction(transaction)
     }
 
-    fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(customer)
+    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(product)
     }
-
+    fun updateProduct(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateProduct(product)
+        }
+    }
     fun updateCustomer(customer: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateCustomer(customer)

@@ -24,9 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivityProduct"
-            android:exported="false">
-
+            android:name=".MainActivityProduct">
         </activity>
     </application>
 </manifest>
