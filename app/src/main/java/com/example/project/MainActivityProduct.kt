@@ -27,8 +27,15 @@ class MainActivityProduct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
 
-        val nextButton = findViewById<Button>(R.id.prevID2)
+        val nextButton = findViewById<Button>(R.id.nextID2)
         nextButton.setOnClickListener {
+            // Start the ProductCustomerActivity when Next is clicked
+            val intent = Intent(this, MainActivityTransaction::class.java)
+            startActivity(intent)
+        }
+
+        val prevButton = findViewById<Button>(R.id.prevID2)
+        prevButton.setOnClickListener {
             // Start the ProductCustomerActivity when Next is clicked
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

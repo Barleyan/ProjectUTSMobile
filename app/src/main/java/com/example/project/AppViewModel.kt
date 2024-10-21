@@ -47,9 +47,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             repository.updateProduct(product)
         }
     }
+
     fun updateCustomer(customer: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateCustomer(customer)
         }
+    }
+    fun updateTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateTransaction(transaction)
+        }
+    }
+    fun deleteTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(transaction)
     }
 }

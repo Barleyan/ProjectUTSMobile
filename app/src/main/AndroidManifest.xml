@@ -26,5 +26,8 @@
         <activity
             android:name=".MainActivityProduct">
         </activity>
+        <activity
+            android:name=".MainActivityTransaction">
+        </activity>
     </application>
 </manifest>

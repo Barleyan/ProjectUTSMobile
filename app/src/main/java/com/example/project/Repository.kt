@@ -1,7 +1,7 @@
 package com.example.project
 
-import android.provider.SyncStateContract.Helpers.update
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 
 class Repository(private val productDao: ProductDao, private val customerDao: CustomerDao, private val transactionDao: TransactionDao) {
 
@@ -31,10 +31,12 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun updateProduct(product: Product) {
         productDao.updateproduct(product)
     }
-
-    companion object {
-        fun delete(customer: Customer) {
-        }
-
+    suspend fun delete(transaction: Transaction) {
+        transactionDao.deleteTransaction(transaction)
+    }
+    suspend fun updateTransaction(transaction: Transaction) {
+        transactionDao.updateTransaction(transaction)
     }
 }
+
+
