@@ -111,7 +111,7 @@
             transaction.customerId = newCustomer
             transaction.quantity = newQuantity
             transaction.totalPrice = newtotalPrice
-            (context as MainActivityProduct).appViewModel.updateTransaction(transaction)
+            (context as MainActivityTransaction).appViewModel.updateTransaction(transaction)
 
             // Notify adapter of the change
             notifyItemChanged(position)
