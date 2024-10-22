@@ -26,14 +26,6 @@
             setContentView(R.layout.activity_transaction)
 
 
-            val prevButton = findViewById<Button>(R.id.prevID3)
-            prevButton.setOnClickListener {
-                // Start the ProductCustomerActivity when Next is clicked
-                val intent = Intent(this, MainActivityProduct::class.java)
-                startActivity(intent)
-            }
-
-
             // Setup RecyclerView
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
             recyclerView.layoutManager = LinearLayoutManager(this)
