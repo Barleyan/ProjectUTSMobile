@@ -47,7 +47,7 @@
             // Observing data and updating UI
             appViewModel.allTransactions.observe(this, Observer { transactions ->
                 transactions?.let {
-                    transactionAdapter.updateTransactions(it) // Nama metode yang benar
+                    transactionAdapter.updateTransactions(transactions) // Nama metode yang benar
                     // Update RecyclerView with customer data
                 }
             })
@@ -89,6 +89,9 @@
                 .create()
                 .show()
         }
+
+
+// Ensure updateTransactions is correctly defined in the adapter to handle data changes
 
 
         // Fungsi untuk menghapus pelanggan dari ViewModel

@@ -42,19 +42,21 @@
         android:id="@+id/tvquantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Quantity: 0, Total: 0.0"
+        android:text="Quantity: 0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCustomerId"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/tvTotalPrice"
+        android:id="@+id/tvtotalprice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Quantity: 0, Total: 0.0"
+        android:layout_marginTop="20dp"
+        android:text="Total Price: 0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCustomerId"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tvCustomerId" />
 
     <ImageButton
         android:id="@+id/btnDeleteTransaction"

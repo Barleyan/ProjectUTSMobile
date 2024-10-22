@@ -19,9 +19,6 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun updateCustomer(customer: Customer) {
         customerDao.update(customer)
     }
-    suspend fun insertTransaction(transaction: Transaction) {
-        transactionDao.insertTransaction(transaction)
-    }
     suspend fun delete(customer: Customer) {
         customerDao.delete(customer)
     }
@@ -30,6 +27,9 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     }
     suspend fun updateProduct(product: Product) {
         productDao.updateproduct(product)
+    }
+    suspend fun insertTransaction(transaction: Transaction) {
+        transactionDao.insertTransaction(transaction)
     }
     suspend fun delete(transaction: Transaction) {
         transactionDao.deleteTransaction(transaction)
