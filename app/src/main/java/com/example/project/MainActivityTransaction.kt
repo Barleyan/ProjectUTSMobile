@@ -16,6 +16,7 @@
     import com.example.project.TransactionAdapter
     import com.google.android.material.floatingactionbutton.FloatingActionButton
 
+    @Suppress("UNREACHABLE_CODE")
     class MainActivityTransaction : AppCompatActivity() {
 
         lateinit var appViewModel: AppViewModel
@@ -39,7 +40,7 @@
             // Observing data and updating UI
             appViewModel.allTransactions.observe(this, Observer { transactions ->
                 transactions?.let {
-                    transactionAdapter.updateTransactions(transactions) // Nama metode yang benar
+                    transactionAdapter.updateTransactions(it) // Nama metode yang benar
                     // Update RecyclerView with customer data
                 }
             })
@@ -66,14 +67,14 @@
                 .setView(dialogView)
                 .setPositiveButton("Tambah") { dialog, which ->
                     // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
-                    var ProdukID = produkIDInput.text.toString()
-                    var CustomerID = customerIDInput.text.toString()
-                    var QuantityID = quantityIDInput.text.toString()
-                    val TotalPriceID = totalPriceIDInput.text.toString()
+                    val ProdukID = produkIDInput.text.toString()
+                    val CustomerID = customerIDInput.text.toString()
+                    val QuantityID = quantityIDInput.text.toString()
+                    val TotalpriceID = totalPriceIDInput.text.toString()
 
-                    if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty() && TotalPriceID.isNotEmpty()) {
+                    if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty()) {
                         val newTransaction = Transaction(
-                            productId = ProdukID, customerId = CustomerID, quantity = QuantityID, totalPrice = TotalPriceID)
+                            productId = ProdukID, customerId = CustomerID, quantity = QuantityID, totalPrice = TotalpriceID)
                         appViewModel.insertTransaction(newTransaction) // Menyimpan data ke ViewModel
                     }
                 }
