@@ -38,13 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Total Harga"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etamountID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Amount"
+        android:textSize="16dp"
         android:inputType="textPersonName" />
 
 </LinearLayout>
