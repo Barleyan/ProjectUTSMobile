@@ -20,8 +20,8 @@
         inner class TransactionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val productID: TextView = view.findViewById(R.id.tvProductId)
             val customerID: TextView = view.findViewById(R.id.tvCustomerId)
-            val quantity: TextView = view.findViewById(R.id.tvTransactionDetails)
-            val TotalPrice: TextView = view.findViewById(R.id.tvTransactionDetails)
+            val quantity: TextView = view.findViewById(R.id.tvquantity)
+            val TotalPrice: TextView = view.findViewById(R.id.tvTotalPrice)
             val btnDeleteTransaction: ImageButton = view.findViewById(R.id.btnDeleteTransaction)
             val btnEditTransaction: ImageButton = view.findViewById(R.id.btnEditTransaction)
         }
@@ -61,7 +61,7 @@
         // Show delete confirmation dialog
         private fun showDeleteConfirmationDialog(context: Context, transaction: Transaction, position: Int) {
             AlertDialog.Builder(context)
-                .setTitle("Hapus Produk")
+                .setTitle("Hapus Transaksi")
                 .setMessage("Anda yakin ingin menghapus ${transaction.customerId}?")
                 .setPositiveButton("Ya") { _, _ ->
                     deleteTransaction(context, transaction, position)
@@ -73,7 +73,7 @@
         // Show edit product dialog
         private fun showEditTransactionDialog(context: Context, transaction: Transaction, position: Int) {
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Edit Produk")
+            builder.setTitle("Edit Transaksi")
 
             val inflater = LayoutInflater.from(context)
             val dialogView = inflater.inflate(R.layout.dialog_add_transaction, null)
