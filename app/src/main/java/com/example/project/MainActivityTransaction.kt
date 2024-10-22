@@ -67,7 +67,6 @@
             val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
             val quantityIDInput = dialogView.findViewById<EditText>(R.id.etquantityID)
             val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.ettotalPriceID)
-            val amountIDInput = dialogView.findViewById<EditText>(R.id.etamountID)
 
             // Membuat dialog
             AlertDialog.Builder(this)
@@ -78,16 +77,11 @@
                     var ProdukID = produkIDInput.text.toString()
                     var CustomerID = customerIDInput.text.toString()
                     var QuantityID = quantityIDInput.text.toString()
-                    val totalPriceID = totalPriceIDInput.text.toString()
-                    val amount = amountIDInput.text.toString()
+                    val TotalPriceID = totalPriceIDInput.text.toString()
 
-                    if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty()) {
+                    if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty() && TotalPriceID.isNotEmpty()) {
                         val newTransaction = Transaction(
-                            productId = ProdukID, customerId = CustomerID, quantity = QuantityID,
-                            id = TODO(),
-                            totalPrice = TODO(),
-                            amount = TODO()
-                        )
+                            productId = ProdukID, customerId = CustomerID, quantity = QuantityID, totalPrice = TotalPriceID)
                         appViewModel.insertTransaction(newTransaction) // Menyimpan data ke ViewModel
                     }
                 }

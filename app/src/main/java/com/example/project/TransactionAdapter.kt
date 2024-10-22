@@ -21,6 +21,7 @@
             val productID: TextView = view.findViewById(R.id.tvProductId)
             val customerID: TextView = view.findViewById(R.id.tvCustomerId)
             val quantity: TextView = view.findViewById(R.id.tvTransactionDetails)
+            val TotalPrice: TextView = view.findViewById(R.id.tvTransactionDetails)
             val btnDeleteTransaction: ImageButton = view.findViewById(R.id.btnDeleteTransaction)
             val btnEditTransaction: ImageButton = view.findViewById(R.id.btnEditTransaction)
         }
@@ -36,6 +37,7 @@
             holder.productID.text = transaction.productId
             holder.customerID.text = transaction.customerId
             holder.quantity.text = transaction.quantity
+            holder.TotalPrice.text = transaction.totalPrice
 
             // Setup delete button functionality
             holder.btnDeleteTransaction.setOnClickListener {
@@ -80,18 +82,21 @@
             val editProdukID = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
             val editCustomerID = dialogView.findViewById<EditText>(R.id.etCustomerID)
             val editQuantity = dialogView.findViewById<EditText>(R.id.etquantityID)
+            val editTotalPrice = dialogView.findViewById<EditText>(R.id.ettotalPriceID)
 
             // Set current product data in the EditText fields
             editProdukID.setText(transaction.productId)
             editCustomerID.setText(transaction.customerId)
             editQuantity.setText(transaction.quantity)
+            editTotalPrice.setText(transaction.totalPrice)
 
             // Set dialog actions
             builder.setPositiveButton("Simpan") { _, _ ->
                 val newProduk = editProdukID.text.toString()
                 val newCustomer = editCustomerID.text.toString()
                 val newQuantity = editQuantity.text.toString()
-                updateTransaction(context, transaction, position, newProduk, newCustomer, newQuantity)
+                val newTotalPrice = editTotalPrice.text.toString()
+                updateTransaction(context, transaction, position, newProduk, newCustomer, newQuantity, newTotalPrice)
             }
             builder.setNegativeButton("Batal", null)
 
@@ -100,11 +105,12 @@
         }
 
         // Update product details
-        private fun updateTransaction(context: Context, transaction: Transaction, position: Int, newProduk: String, newCustomer: String, newQuantity: String) {
+        private fun updateTransaction(context: Context, transaction: Transaction, position: Int, newProduk: String, newCustomer: String, newQuantity: String, newtotalPrice: String) {
             // Update product data in ViewModel
             transaction.productId = newProduk
             transaction.customerId = newCustomer
             transaction.quantity = newQuantity
+            transaction.totalPrice = newtotalPrice
             (context as MainActivityProduct).appViewModel.updateTransaction(transaction)
 
             // Notify adapter of the change
