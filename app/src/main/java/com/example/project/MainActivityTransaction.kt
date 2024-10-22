@@ -66,6 +66,8 @@
             val produkIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
             val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
             val quantityIDInput = dialogView.findViewById<EditText>(R.id.etquantityID)
+            val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.ettotalPriceID)
+            val amountIDInput = dialogView.findViewById<EditText>(R.id.etamountID)
 
             // Membuat dialog
             AlertDialog.Builder(this)
@@ -73,9 +75,11 @@
                 .setView(dialogView)
                 .setPositiveButton("Tambah") { dialog, which ->
                     // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
-                    val ProdukID = produkIDInput.text.toString()
-                    val CustomerID = customerIDInput.text.toString()
-                    val QuantityID = quantityIDInput.text.toString()
+                    var ProdukID = produkIDInput.text.toString()
+                    var CustomerID = customerIDInput.text.toString()
+                    var QuantityID = quantityIDInput.text.toString()
+                    val totalPriceID = totalPriceIDInput.text.toString()
+                    val amount = amountIDInput.text.toString()
 
                     if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty()) {
                         val newTransaction = Transaction(

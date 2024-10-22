@@ -80,9 +80,9 @@ class MainActivityProduct : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("Tambah") { dialog, which ->
                 // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
-                val name = productNameInput.text.toString()
-                val price = productPriceInput.text.toString()
-                val stock = productStockInput.text.toString()
+                var name = productNameInput.text.toString()
+                var price = productPriceInput.text.toString()
+                var stock = productStockInput.text.toString()
 
                 if (name.isNotEmpty() && price.isNotEmpty() && stock.isNotEmpty()) {
                     val newProduct = Product(name2 = name, price = price, stock = stock)

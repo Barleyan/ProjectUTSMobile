@@ -9,7 +9,7 @@ data class Transaction(
     var productId: String,
     var customerId: String,
     var quantity: String,
-    val totalPrice: Double,
-    val amount: Double
+    val totalPrice: String,
+    val amount: String
 )
 
