@@ -8,6 +8,7 @@
     android:background="@drawable/background_dialog"
     android:elevation="8dp">
 
+    <!-- Nama Customer -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +23,12 @@
             android:hint="Masukkan Nama Customer"
             android:inputType="textPersonName"
             android:padding="8dp"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- No. Telepon -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +43,18 @@
             android:hint="Masukkan No.Telp"
             android:inputType="phone"
             android:padding="8dp"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Placeholder for any additional information or action -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Silakan isi data di atas."
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="16dp"
+        android:gravity="center"/>
 
 </LinearLayout>

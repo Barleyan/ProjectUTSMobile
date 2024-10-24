@@ -1,35 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etName2"
+    <!-- Nama Produk -->
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nama Produk"
-        android:inputType="textPersonName"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp" />
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@android:color/black"
+        app:hintTextColor="@android:color/black">
 
-    <EditText
-        android:id="@+id/etPrice"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Harga Produk -->
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Harga"
-        android:inputType="numberDecimal"
-    android:background="@drawable/edit_text_background"
-    android:padding="10dp" />
+        android:hint="Harga Produk"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@android:color/black"
+        app:hintTextColor="@android:color/black">
 
-    <EditText
-        android:id="@+id/etStok"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Stok Produk -->
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Stok"
-        android:inputType="number"
-    android:background="@drawable/edit_text_background"
-    android:padding="10dp" />
+        android:hint="Stok Produk"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@android:color/black"
+        app:hintTextColor="@android:color/black">
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etStok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</com.google.android.material.textfield.TextInputLayout>
