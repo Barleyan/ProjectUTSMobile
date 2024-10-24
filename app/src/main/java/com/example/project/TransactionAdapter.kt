@@ -20,8 +20,8 @@
         inner class TransactionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val productID: TextView = view.findViewById(R.id.tvProductId)
             val customerID: TextView = view.findViewById(R.id.tvCustomerId)
-            val quantity: TextView = view.findViewById(R.id.tvquantity)
-            val TotalPrice: TextView = view.findViewById(R.id.tvtotalprice)
+            val quantity: TextView = view.findViewById(R.id.tvQuantity)
+            val TotalPrice: TextView = view.findViewById(R.id.tvTotalPrice)
             val btnDeleteTransaction: ImageButton = view.findViewById(R.id.btnDeleteTransaction)
             val btnEditTransaction: ImageButton = view.findViewById(R.id.btnEditTransaction)
         }
