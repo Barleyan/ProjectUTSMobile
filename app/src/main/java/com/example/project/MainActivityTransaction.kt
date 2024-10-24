@@ -27,46 +27,42 @@
             setContentView(R.layout.activity_transaction)
 
 
-            // Setup RecyclerView
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
             recyclerView.layoutManager = LinearLayoutManager(this)
 
-            // Initialize adapter with empty list
             transactionAdapter = TransactionAdapter(mutableListOf())
             recyclerView.adapter = transactionAdapter
 
             appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
-            // Observing data and updating UI
             appViewModel.allTransactions.observe(this, Observer { transactions ->
                 transactions?.let {
-                    transactionAdapter.updateTransactions(it) // Nama metode yang benar
-                    // Update RecyclerView with customer data
+                    transactionAdapter.updateTransactions(it)
+
                 }
             })
 
-            // Tombol FloatingActionButton untuk menambah data
             val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
             fabAdd.setOnClickListener {
-                showAddTransactionDialog() // Tampilkan dialog untuk menambah customer
+                showAddTransactionDialog()
             }
         }
 
-        // Fungsi untuk menampilkan dialog penambahan customer baru
+
         private fun showAddTransactionDialog() {
-            // Inflating the layout untuk dialog
+
             val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_transaction, null)
             val produkIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
             val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
             val quantityIDInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
             val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-            // Membuat dialog
+
             AlertDialog.Builder(this)
                 .setTitle("Tambah Transaki")
                 .setView(dialogView)
                 .setPositiveButton("Tambah") { dialog, which ->
-                    // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
+
                     val ProdukID = produkIDInput.text.toString()
                     val CustomerID = customerIDInput.text.toString()
                     val QuantityID = quantityIDInput.text.toString()
@@ -75,7 +71,7 @@
                     if (ProdukID.isNotEmpty() && CustomerID.isNotEmpty() && QuantityID.isNotEmpty()) {
                         val newTransaction = Transaction(
                             productId = ProdukID, customerId = CustomerID, quantity = QuantityID, totalPrice = TotalpriceID)
-                        appViewModel.insertTransaction(newTransaction) // Menyimpan data ke ViewModel
+                        appViewModel.insertTransaction(newTransaction)
                     }
                 }
                 .setNegativeButton("Batal", null)
@@ -84,11 +80,9 @@
         }
 
 
-// Ensure updateTransactions is correctly defined in the adapter to handle data changes
 
 
-        // Fungsi untuk menghapus pelanggan dari ViewModel
         fun deleteTransaction(transaction: Transaction) {
-            appViewModel.deleteTransaction(transaction) // Memanggil fungsi delete di ViewModel
+            appViewModel.deleteTransaction(transaction)
         }
     }
