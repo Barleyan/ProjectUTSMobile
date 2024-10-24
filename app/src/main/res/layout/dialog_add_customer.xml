@@ -42,25 +42,4 @@
             android:background="@drawable/edit_text_background"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/fabAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/resistance_blue"
-        android:text="Simpan"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"/>
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/darker_gray"
-        android:text="Batal"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"/>
 </LinearLayout>
