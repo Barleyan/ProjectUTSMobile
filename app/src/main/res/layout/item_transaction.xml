@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="#98C6D9">
+        android:background="@android:color/white">
 
         <!-- ID Transaksi -->
         <TextView
@@ -22,10 +22,10 @@
             android:text="Transaction ID"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- ID Produk -->
         <TextView
@@ -33,10 +33,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Product ID"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionId"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTransactionId"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- ID Pelanggan -->
         <TextView
@@ -44,10 +44,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Customer ID"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductId"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvProductId"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Jumlah -->
         <TextView
@@ -55,10 +55,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Quantity: 0"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCustomerId"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCustomerId"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Total Harga -->
         <TextView
@@ -67,10 +67,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Total Price: 0"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvQuantity"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantity"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Tombol Hapus Transaksi -->
         <ImageButton

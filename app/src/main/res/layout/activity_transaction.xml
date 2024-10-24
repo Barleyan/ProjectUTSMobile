@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Toolbar with elevation -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/resistance_blue"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="#0099CC"
+        android:elevation="4dp"
         app:title="TRANSACTION LIST"
         app:titleTextColor="@android:color/white"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -19,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- RecyclerView for displaying transaction items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -26,8 +28,11 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fabAdd"/>
+        app:layout_constraintBottom_toTopOf="@id/fabAdd"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
+    <!-- Floating Action Button for adding new transactions -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
@@ -35,9 +40,14 @@
         android:layout_margin="16dp"
         android:contentDescription="Add Data"
         android:src="@android:drawable/ic_input_add"
+        android:backgroundTint="@android:color/holo_blue_light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonGroup" />
+        app:layout_constraintBottom_toTopOf="@id/buttonGroup"
+        android:elevation="6dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
+    <!-- Placeholder for button group or additional content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonGroup"
         android:layout_width="0dp"
@@ -45,10 +55,17 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@id/recyclerView">
+
+        <!-- Sample image view to enhance aesthetics -->
+        <ImageView
+            android:id="@+id/sampleImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_transaction_image"
+        android:contentDescription="Sample Transaction Image"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
