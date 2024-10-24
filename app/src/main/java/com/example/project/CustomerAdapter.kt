@@ -4,13 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.MainActivity
 import com.barleyan.managementoko.R
+import com.google.android.material.textfield.TextInputEditText
 
 class CustomerAdapter(private var customerList: MutableList<Customer>) :
     RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
@@ -48,8 +48,8 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
     override fun getItemCount(): Int = customerList.size
 
     fun updateCustomers(newCustomers: List<Customer>) {
-        customerList.clear() // clear the existing list
-        customerList.addAll(newCustomers) // add all new customers
+        customerList.clear() // Clear the existing list
+        customerList.addAll(newCustomers) // Add all new customers
         notifyDataSetChanged()
     }
 
@@ -58,9 +58,7 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         AlertDialog.Builder(context)
             .setTitle("Hapus Pelanggan")
             .setMessage("Anda yakin ingin menghapus ${customer.name}?")
-            .setPositiveButton("Ya") { _, _ ->
-                deleteCustomer(context, customer, position)
-            }
+            .setPositiveButton("Ya") { _, _ -> deleteCustomer(context, customer, position) }
             .setNegativeButton("Batal", null)
             .show()
     }
@@ -71,23 +69,29 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         builder.setTitle("Edit Pelanggan")
 
         val inflater = LayoutInflater.from(context)
-        val dialogView = inflater.inflate(R.layout.dialog_add_customer, null) // inflate the correct layout
+        val dialogView = inflater.inflate(R.layout.dialog_add_customer, null)
         builder.setView(dialogView)
 
-        val editName = dialogView.findViewById<EditText>(R.id.etName) // use correct IDs
-        val editPhone = dialogView.findViewById<EditText>(R.id.etPhone)
+        val editName = dialogView.findViewById<TextInputEditText>(R.id.etName)
+        val editPhone = dialogView.findViewById<TextInputEditText>(R.id.etPhone)
 
         // Set current customer data in the EditText fields
         editName.setText(customer.name)
         editPhone.setText(customer.phoneNumber)
 
         // Set dialog actions
-        builder.setPositiveButton("Simpan") { _, _ ->
-            val newName = editName.text.toString()
-            val newPhone = editPhone.text.toString()
-            updateCustomer(context, customer, position, newName, newPhone)
+        builder.setPositiveButton("Simpan") { dialog, _ ->
+            val newName = editName.text.toString().trim()
+            val newPhone = editPhone.text.toString().trim()
+            if (newName.isNotEmpty() && newPhone.isNotEmpty()) {
+                updateCustomer(context, customer, position, newName, newPhone)
+                dialog.dismiss()
+            } else {
+                if (newName.isEmpty()) editName.error = "Nama tidak boleh kosong"
+                if (newPhone.isEmpty()) editPhone.error = "Nomor telepon tidak boleh kosong"
+            }
         }
-        builder.setNegativeButton("Batal", null)
+        builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
 
         // Show the dialog
         builder.show()
@@ -115,4 +119,3 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         notifyItemRangeChanged(position, customerList.size)
     }
 }
-

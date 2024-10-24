@@ -1,11 +1,10 @@
 package com.barleyan.managementoko
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         // Setup RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -34,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         customerAdapter = CustomerAdapter(mutableListOf())
         recyclerView.adapter = customerAdapter
 
+        // Initialize ViewModel
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
         // Observing data and updating UI
@@ -43,42 +42,53 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Tombol FloatingActionButton untuk menambah data
+        // FloatingActionButton for adding a new customer
         val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
         fabAdd.setOnClickListener {
-            showAddCustomerDialog() // Tampilkan dialog untuk menambah customer
+            showAddCustomerDialog() // Show dialog to add customer
         }
     }
 
-    // Fungsi untuk menampilkan dialog penambahan customer baru
+    // Function to show dialog for adding a new customer
     private fun showAddCustomerDialog() {
-        // Inflating the layout untuk dialog
+        // Inflate the layout for the dialog
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_customer, null)
         val customerNameInput = dialogView.findViewById<EditText>(R.id.etName)
         val customerPhoneInput = dialogView.findViewById<EditText>(R.id.etPhone)
 
-        // Membuat dialog
-        AlertDialog.Builder(this)
+        // Create the dialog
+        val dialog = AlertDialog.Builder(this)
             .setTitle("Tambah Client")
             .setView(dialogView)
-            .setPositiveButton("Tambah") { dialog, which ->
-                // Ketika tombol "Tambah" ditekan, ambil input dan simpan data baru
-                val name = customerNameInput.text.toString()
-                val phoneNumber = customerPhoneInput.text.toString()
-
-                if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
-                    val newCustomer = Customer(name = name, phoneNumber = phoneNumber)
-                    appViewModel.insertCustomer(newCustomer) // Menyimpan data ke ViewModel
-                }
-            }
+            .setPositiveButton("Tambah") { _, _ -> }
             .setNegativeButton("Batal", null)
             .create()
-            .show()
+
+        // Show the dialog
+        dialog.show()
+
+        // Override positive button click to handle validation
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val name = customerNameInput.text.toString().trim()
+            val phoneNumber = customerPhoneInput.text.toString().trim()
+
+            // Input validation
+            if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
+                // Save the new customer and dismiss dialog
+                val newCustomer = Customer(name = name, phoneNumber = phoneNumber)
+                appViewModel.insertCustomer(newCustomer) // Save data to ViewModel
+                dialog.dismiss() // Close the dialog after saving
+            } else {
+                // Show error messages if inputs are invalid
+                if (name.isEmpty()) customerNameInput.error = "Nama tidak boleh kosong"
+                if (phoneNumber.isEmpty()) customerPhoneInput.error = "Nomor telepon tidak boleh kosong"
+            }
+        }
     }
 
-
-    // Fungsi untuk menghapus pelanggan dari ViewModel
-    fun deleteCustomer(customer: Customer) {
-        appViewModel.deleteCustomer(customer) // Memanggil fungsi delete di ViewModel
+    // Private function to delete a customer
+    private fun deleteCustomer(customer: Customer) {
+        appViewModel.deleteCustomer(customer) // Call delete function in ViewModel
+        Toast.makeText(this, "${customer.name} has been deleted", Toast.LENGTH_SHORT).show()
     }
 }

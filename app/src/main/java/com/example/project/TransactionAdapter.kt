@@ -81,8 +81,8 @@
 
             val editProdukID = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
             val editCustomerID = dialogView.findViewById<EditText>(R.id.etCustomerID)
-            val editQuantity = dialogView.findViewById<EditText>(R.id.etquantityID)
-            val editTotalPrice = dialogView.findViewById<EditText>(R.id.ettotalPriceID)
+            val editQuantity = dialogView.findViewById<EditText>(R.id.etQuantityID)
+            val editTotalPrice = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
             // Set current product data in the EditText fields
             editProdukID.setText(transaction.productId)

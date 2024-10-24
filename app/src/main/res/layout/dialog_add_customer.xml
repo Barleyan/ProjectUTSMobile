@@ -1,23 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background_dialog"
+    android:elevation="8dp">
 
-    <EditText
-        android:id="@+id/etName"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukkan Nama Customer"
-        android:inputType="textPersonName" />
+        android:layout_marginBottom="16dp"
+        app:hintEnabled="true"
+        app:hintAnimationEnabled="true">
 
-    <EditText
-        android:id="@+id/etPhone"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Masukkan Nama Customer"
+            android:inputType="textPersonName"
+            android:padding="8dp"
+            android:background="@drawable/edit_text_background"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Masukkan No.Telp"
-        android:inputType="phone" />
+        android:layout_marginBottom="16dp"
+        app:hintEnabled="true"
+        app:hintAnimationEnabled="true">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Masukkan No.Telp"
+            android:inputType="phone"
+            android:padding="8dp"
+            android:background="@drawable/edit_text_background"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/resistance_blue"
+        android:text="Simpan"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/darker_gray"
+        android:text="Batal"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:padding="12dp"/>
 </LinearLayout>

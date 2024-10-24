@@ -6,39 +6,47 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/etTransactionID"
+        android:id="@+id/tvTransactionID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Transaction ID"
-        android:inputType="textPersonName" />
+        android:text="Transaction ID"
+    android:textStyle="bold"
+    android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etProdukTransaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nama Produk"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:background="@drawable/edit_text_background"
+    android:padding="10dp" />
 
     <EditText
         android:id="@+id/etCustomerID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nama Customer"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:background="@drawable/edit_text_background"
+    android:padding="10dp" />
 
     <EditText
-        android:id="@+id/etquantityID"
+        android:id="@+id/etQuantityID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Jumlah Produk"
-        android:inputType="textPersonName" />
+        android:inputType="number"
+    android:background="@drawable/edit_text_background"
+    android:padding="10dp" />
 
     <EditText
-        android:id="@+id/ettotalPriceID"
+        android:id="@+id/etTotalPriceID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Total Harga"
-        android:textSize="16dp"
-        android:inputType="textPersonName" />
+        android:inputType="numberDecimal"
+    android:background="@drawable/edit_text_background"
+    android:padding="10dp" />
 
 </LinearLayout>

@@ -58,8 +58,8 @@
             val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_transaction, null)
             val produkIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
             val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
-            val quantityIDInput = dialogView.findViewById<EditText>(R.id.etquantityID)
-            val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.ettotalPriceID)
+            val quantityIDInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
+            val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
             // Membuat dialog
             AlertDialog.Builder(this)
