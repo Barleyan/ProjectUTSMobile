@@ -33,21 +33,23 @@
         android:clipToPadding="false"/>
 
     <!-- Floating Action Button for adding new transactions -->
+
+    <!-- Placeholder for button group or additional content -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="Add Data"
-        android:src="@android:drawable/ic_input_add"
+        android:layout_marginBottom="4dp"
         android:backgroundTint="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonGroup"
-        android:elevation="6dp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:contentDescription="Add Data"
+        android:elevation="6dp"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toTopOf="@id/buttonGroup"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Placeholder for button group or additional content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonGroup"
         android:layout_width="0dp"
@@ -58,15 +60,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
-        <!-- Sample image view to enhance aesthetics -->
-        <ImageView
-            android:id="@+id/sampleImageView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/sample_transaction_image"
-        android:contentDescription="Sample Transaction Image"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/sampleImageView"
+        android:layout_width="413dp"
+        android:layout_height="191dp"
+        android:contentDescription="Sample Transaction Image"
+        android:src="@drawable/sample_transaction_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="591dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
