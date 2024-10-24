@@ -16,7 +16,6 @@
     class TransactionAdapter(private var transactionList: MutableList<Transaction>) :
         RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
-        // ViewHolder class for product items
         inner class TransactionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val productID: TextView = view.findViewById(R.id.tvProductId)
             val customerID: TextView = view.findViewById(R.id.tvCustomerId)
@@ -39,12 +38,10 @@
             holder.quantity.text = transaction.quantity
             holder.TotalPrice.text = transaction.totalPrice
 
-            // Setup delete button functionality
             holder.btnDeleteTransaction.setOnClickListener {
                 showDeleteConfirmationDialog(holder.itemView.context, transaction, position)
             }
 
-            // Setup edit button functionality
             holder.btnEditTransaction.setOnClickListener {
                 showEditTransactionDialog(holder.itemView.context, transaction, position)
             }
@@ -53,12 +50,12 @@
         override fun getItemCount(): Int = transactionList.size
 
         fun updateTransactions(newTransaction: List<Transaction>) {
-            transactionList.clear() // clear the existing list
-            transactionList.addAll(newTransaction) // add all new products
+            transactionList.clear()
+            transactionList.addAll(newTransaction)
             notifyDataSetChanged()
         }
 
-        // Show delete confirmation dialog
+
         private fun showDeleteConfirmationDialog(context: Context, transaction: Transaction, position: Int) {
             AlertDialog.Builder(context)
                 .setTitle("Hapus Transaksi")
@@ -70,7 +67,7 @@
                 .show()
         }
 
-        // Show edit product dialog
+
         private fun showEditTransactionDialog(context: Context, transaction: Transaction, position: Int) {
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Edit Transaksi")
@@ -84,13 +81,13 @@
             val editQuantity = dialogView.findViewById<EditText>(R.id.etQuantityID)
             val editTotalPrice = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-            // Set current product data in the EditText fields
+
             editProdukID.setText(transaction.productId)
             editCustomerID.setText(transaction.customerId)
             editQuantity.setText(transaction.quantity)
             editTotalPrice.setText(transaction.totalPrice)
 
-            // Set dialog actions
+
             builder.setPositiveButton("Simpan") { _, _ ->
                 val newProduk = editProdukID.text.toString()
                 val newCustomer = editCustomerID.text.toString()
@@ -100,29 +97,23 @@
             }
             builder.setNegativeButton("Batal", null)
 
-            // Show the dialog
             builder.show()
         }
 
-        // Update product details
+
         private fun updateTransaction(context: Context, transaction: Transaction, position: Int, newProduk: String, newCustomer: String, newQuantity: String, newtotalPrice: String) {
-            // Update product data in ViewModel
             transaction.productId = newProduk
             transaction.customerId = newCustomer
             transaction.quantity = newQuantity
             transaction.totalPrice = newtotalPrice
             (context as MainActivityTransaction).appViewModel.updateTransaction(transaction)
 
-            // Notify adapter of the change
             notifyItemChanged(position)
         }
 
-        // Delete product and notify adapter
         private fun deleteTransaction(context: Context, transaction: Transaction, position: Int) {
-            // Call ViewModel function to delete product
             (context as MainActivityTransaction).appViewModel.deleteTransaction(transaction)
 
-            // Remove item from list and notify adapter of changes
             transactionList.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, transactionList.size)

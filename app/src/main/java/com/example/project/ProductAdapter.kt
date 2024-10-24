@@ -15,7 +15,6 @@ import com.barleyan.managementoko.R
 class ProductAdapter(private var productList: MutableList<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    // ViewHolder class for product items
     inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvProductName)
         val productPrice: TextView = view.findViewById(R.id.tvProductPrice)
@@ -36,12 +35,11 @@ class ProductAdapter(private var productList: MutableList<Product>) :
         holder.productPrice.text = product.price
         holder.productStock.text = product.stock
 
-        // Setup delete button functionality
+
         holder.btnDeleteProduct.setOnClickListener {
             showDeleteConfirmationDialog(holder.itemView.context, product, position)
         }
 
-        // Setup edit button functionality
         holder.btnEditProduct.setOnClickListener {
             showEditProductDialog(holder.itemView.context, product, position)
         }
@@ -50,12 +48,11 @@ class ProductAdapter(private var productList: MutableList<Product>) :
     override fun getItemCount(): Int = productList.size
 
     fun updateProducts(newProducts: List<Product>) {
-        productList.clear() // clear the existing list
-        productList.addAll(newProducts) // add all new products
+        productList.clear()
+        productList.addAll(newProducts)
         notifyDataSetChanged()
     }
 
-    // Show delete confirmation dialog
     private fun showDeleteConfirmationDialog(context: Context, product: Product, position: Int) {
         AlertDialog.Builder(context)
             .setTitle("Hapus Produk")
@@ -67,7 +64,6 @@ class ProductAdapter(private var productList: MutableList<Product>) :
             .show()
     }
 
-    // Show edit product dialog
     private fun showEditProductDialog(context: Context, product: Product, position: Int) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Edit Produk")
@@ -80,12 +76,10 @@ class ProductAdapter(private var productList: MutableList<Product>) :
         val editPrice = dialogView.findViewById<EditText>(R.id.etPrice)
         val editStock = dialogView.findViewById<EditText>(R.id.etStok)
 
-        // Set current product data in the EditText fields
         editName.setText(product.name2)
         editPrice.setText(product.price)
         editStock.setText(product.stock)
 
-        // Set dialog actions
         builder.setPositiveButton("Simpan") { _, _ ->
             val newName = editName.text.toString()
             val newPrice = editPrice.text.toString()
@@ -94,28 +88,21 @@ class ProductAdapter(private var productList: MutableList<Product>) :
         }
         builder.setNegativeButton("Batal", null)
 
-        // Show the dialog
         builder.show()
     }
 
-    // Update product details
+
     private fun updateProduct(context: Context, product: Product, position: Int, newName: String, newPrice: String, newStock: String) {
-        // Update product data in ViewModel
         product.name2 = newName
         product.price = newPrice
         product.stock = newStock
         (context as MainActivityProduct).appViewModel.updateProduct(product)
 
-        // Notify adapter of the change
         notifyItemChanged(position)
     }
 
-    // Delete product and notify adapter
     private fun deleteProduct(context: Context, product: Product, position: Int) {
-        // Call ViewModel function to delete product
         (context as MainActivityProduct).appViewModel.deleteProduct(product)
-
-        // Remove item from list and notify adapter of changes
         productList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, productList.size)
