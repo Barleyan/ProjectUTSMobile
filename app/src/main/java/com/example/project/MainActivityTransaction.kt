@@ -59,7 +59,7 @@
 
 
             AlertDialog.Builder(this)
-                .setTitle("Tambah Transaki")
+                .setTitle("Tambah Transaksi")
                 .setView(dialogView)
                 .setPositiveButton("Tambah") { dialog, which ->
 

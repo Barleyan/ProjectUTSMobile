@@ -12,7 +12,6 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun insertProduct(product: Product) {
         productDao.insertProduct(product)
     }
-
     suspend fun insertCustomer(customer: Customer) {
         customerDao.insertCustomer(customer)
     }
