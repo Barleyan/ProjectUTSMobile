@@ -16,6 +16,9 @@ interface CustomerDao {
     @Query("SELECT * FROM customer_table")
     fun getAllCustomers(): LiveData<List<Customer>>
 
+    @Query("SELECT * FROM customer_table")
+    fun getAll(): Array<Customer>
+
     @Delete
     suspend fun delete(customer: Customer)
 
