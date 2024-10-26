@@ -16,7 +16,7 @@ class DatabaseTest {
     private lateinit var customerDao: CustomerDao
     private lateinit var db: AppDatabase
 
-    private val mobile = Customer(1, "Barleyan", "08912345678")
+    private val mobile = Customer(2, "Dafa", "08912345678")
 
     @Before
     fun createDb() {
@@ -32,9 +32,9 @@ class DatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndRetrieveMatkul() {
+    fun insertAndRetrieveCustomers() {
         customerDao.insertCustomer(mobile)
         val result = customerDao.getAll()
-        assert(result.size == 2)
+        assert(result.size == 1)
     }
 }
