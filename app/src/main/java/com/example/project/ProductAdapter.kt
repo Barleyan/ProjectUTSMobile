@@ -8,12 +8,13 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.MainActivityProduct
 import com.barleyan.managementoko.R
 
-class ProductAdapter(private var productList: MutableList<Product>) :
-    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvProductName)
@@ -30,11 +31,10 @@ class ProductAdapter(private var productList: MutableList<Product>) :
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = productList[position]
+        val product = getItem(position)
         holder.productName.text = product.name2
         holder.productPrice.text = product.price
         holder.productStock.text = product.stock
-
 
         holder.btnDeleteProduct.setOnClickListener {
             showDeleteConfirmationDialog(holder.itemView.context, product, position)
@@ -43,14 +43,6 @@ class ProductAdapter(private var productList: MutableList<Product>) :
         holder.btnEditProduct.setOnClickListener {
             showEditProductDialog(holder.itemView.context, product, position)
         }
-    }
-
-    override fun getItemCount(): Int = productList.size
-
-    fun updateProducts(newProducts: List<Product>) {
-        productList.clear()
-        productList.addAll(newProducts)
-        notifyDataSetChanged()
     }
 
     private fun showDeleteConfirmationDialog(context: Context, product: Product, position: Int) {
@@ -91,7 +83,6 @@ class ProductAdapter(private var productList: MutableList<Product>) :
         builder.show()
     }
 
-
     private fun updateProduct(context: Context, product: Product, position: Int, newName: String, newPrice: String, newStock: String) {
         product.name2 = newName
         product.price = newPrice
@@ -103,8 +94,16 @@ class ProductAdapter(private var productList: MutableList<Product>) :
 
     private fun deleteProduct(context: Context, product: Product, position: Int) {
         (context as MainActivityProduct).appViewModel.deleteProduct(product)
-        productList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, productList.size)
+        submitList(currentList.toMutableList().apply { removeAt(position) })
+    }
+
+    class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id // Ensure each Product has a unique identifier
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
     }
 }

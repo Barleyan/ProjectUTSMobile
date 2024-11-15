@@ -1,5 +1,3 @@
-package com.example.project
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +5,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.MainActivity
 import com.barleyan.managementoko.R
+import com.example.project.Customer
 import com.google.android.material.textfield.TextInputEditText
 
-class CustomerAdapter(private var customerList: MutableList<Customer>) :
-    RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
+class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.CustomerViewHolder>(CustomerDiffCallback()) {
 
     inner class CustomerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val customerName: TextView = view.findViewById(R.id.tvCustomerName)
@@ -29,7 +29,7 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
     }
 
     override fun onBindViewHolder(holder: CustomerViewHolder, position: Int) {
-        val customer = customerList[position]
+        val customer = getItem(position)
         holder.customerName.text = customer.name
         holder.customerPhone.text = customer.phoneNumber
 
@@ -42,15 +42,6 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         }
     }
 
-    override fun getItemCount(): Int = customerList.size
-
-    fun updateCustomers(newCustomers: List<Customer>) {
-        customerList.clear()
-        customerList.addAll(newCustomers)
-        notifyDataSetChanged()
-    }
-
-
     private fun showDeleteConfirmationDialog(context: Context, customer: Customer, position: Int) {
         AlertDialog.Builder(context)
             .setTitle("Hapus Pelanggan")
@@ -59,7 +50,6 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
             .setNegativeButton("Batal", null)
             .show()
     }
-
 
     private fun showEditCustomerDialog(context: Context, customer: Customer, position: Int) {
         val builder = AlertDialog.Builder(context)
@@ -91,7 +81,6 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
         builder.show()
     }
 
-
     private fun updateCustomer(context: Context, customer: Customer, position: Int, newName: String, newPhone: String) {
         customer.name = newName
         customer.phoneNumber = newPhone
@@ -103,8 +92,17 @@ class CustomerAdapter(private var customerList: MutableList<Customer>) :
     private fun deleteCustomer(context: Context, customer: Customer, position: Int) {
         (context as MainActivity).appViewModel.deleteCustomer(customer)
 
-        customerList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, customerList.size)
+        submitList(currentList.toMutableList().apply { removeAt(position) })
+    }
+
+    // Custom DiffUtil Callback
+    class CustomerDiffCallback : DiffUtil.ItemCallback<Customer>() {
+        override fun areItemsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+            return oldItem.id == newItem.id // Use a unique identifier for comparison
+        }
+
+        override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+            return oldItem == newItem
+        }
     }
 }
