@@ -23,25 +23,10 @@ class MainActivityProduct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(this, 2) // Menampilkan item dalam 2 kolom
 
-        // Set up GridLayoutManager with 2 columns
-        val gridLayoutManager = GridLayoutManager(this, 2)
-
-        // Optionally, define how many spans an item should occupy
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                // Example: You can customize how many columns an item occupies
-                return when (position % 3) {
-                    0 -> 2 // Every third item takes up 2 columns
-                    else -> 1 // Other items take up 1 column
-                }
-            }
-        }
-
-        recyclerView.layoutManager = gridLayoutManager
-
-        // Initialize the adapter (no need for mutable list now)
+        // Initialize the adapter
         productAdapter = ProductAdapter()
         recyclerView.adapter = productAdapter
 
@@ -51,7 +36,7 @@ class MainActivityProduct : AppCompatActivity() {
         // Observe live data for products and submit the list to the adapter
         appViewModel.allProducts.observe(this, Observer { products ->
             products?.let {
-                productAdapter.submitList(it)  // Use submitList instead of updateProducts
+                productAdapter.submitList(it)
             }
         })
 
@@ -79,7 +64,7 @@ class MainActivityProduct : AppCompatActivity() {
 
                 if (name.isNotEmpty() && price.isNotEmpty() && stock.isNotEmpty()) {
                     val newProduct = Product(name2 = name, price = price, stock = stock)
-                    appViewModel.insertProduct(newProduct)  // Insert the new product via ViewModel
+                    appViewModel.insertProduct(newProduct)
                 }
             }
             .setNegativeButton("Batal", null)
