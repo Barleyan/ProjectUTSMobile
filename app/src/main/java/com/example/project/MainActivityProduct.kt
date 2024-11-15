@@ -7,7 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.AppViewModel
 import com.example.project.Product
@@ -24,7 +24,22 @@ class MainActivityProduct : AppCompatActivity() {
         setContentView(R.layout.activity_product)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Set up GridLayoutManager with 2 columns
+        val gridLayoutManager = GridLayoutManager(this, 2)
+
+        // Optionally, define how many spans an item should occupy
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                // Example: You can customize how many columns an item occupies
+                return when (position % 3) {
+                    0 -> 2 // Every third item takes up 2 columns
+                    else -> 1 // Other items take up 1 column
+                }
+            }
+        }
+
+        recyclerView.layoutManager = gridLayoutManager
 
         // Initialize the adapter (no need for mutable list now)
         productAdapter = ProductAdapter()

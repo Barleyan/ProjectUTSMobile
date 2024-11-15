@@ -14,55 +14,42 @@
         android:background="@android:color/white"
     android:padding="16dp">
 
-    <!-- Gambar Produk -->
-    <ImageView
-        android:id="@+id/productImage"
-        android:layout_width="73dp"
-        android:layout_height="72dp"
-        android:layout_marginEnd="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_product_placeholder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <!-- Nama Produk -->
-    <TextView
-        android:id="@+id/tvProductName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Product Name"
-        android:textColor="@android:color/black"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toStartOf="@id/btnEditProduct"
-    app:layout_constraintStart_toEndOf="@id/productImage"
-    app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Product Name"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btnEditProduct"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Harga Produk -->
-    <TextView
-        android:id="@+id/tvProductPrice"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Price"
-        android:textColor="@android:color/black"
-    app:layout_constraintEnd_toStartOf="@id/btnEditProduct"
-    app:layout_constraintStart_toEndOf="@id/productImage"
-    app:layout_constraintTop_toBottomOf="@id/tvProductName" />
+        <TextView
+            android:id="@+id/tvProductPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Price"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toStartOf="@id/btnEditProduct"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProductName" />
 
     <!-- Stok Produk -->
-    <TextView
-        android:id="@+id/tvProductStock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Stock: 0"
-        android:textColor="@android:color/black"
-    app:layout_constraintStart_toEndOf="@id/productImage"
-    app:layout_constraintTop_toBottomOf="@id/tvProductPrice"
-    app:layout_constraintEnd_toStartOf="@id/btnEditProduct" />
+        <TextView
+            android:id="@+id/tvProductStock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Stock: 0"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toStartOf="@id/btnEditProduct"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProductPrice" />
 
     <!-- Tombol Hapus Produk -->
     <ImageButton

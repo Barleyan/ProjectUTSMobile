@@ -1,7 +1,6 @@
 package com.barleyan.managementoko
 
 import CustomerAdapter
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -9,11 +8,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.AppViewModel
 import com.example.project.Customer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.app.AlertDialog
+import com.barleyan.managementoko.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +26,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Set up GridLayoutManager with 2 columns
+        val gridLayoutManager = GridLayoutManager(this, 2)
+
+        // Optionally, you can define how many spans an item should occupy
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                // Example: You can customize how many columns an item occupies
+                return when (position % 3) {
+                    0 -> 2 // For example, every third item takes 2 columns
+                    else -> 1 // Default is 1 column for the other items
+                }
+            }
+        }
+
+        recyclerView.layoutManager = gridLayoutManager
 
         // Initialize the adapter without passing an initial list
         customerAdapter = CustomerAdapter()
