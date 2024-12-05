@@ -14,7 +14,6 @@ import com.example.project.AppViewModel
 import com.example.project.Customer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.app.AlertDialog
-import com.barleyan.managementoko.R
 
 class MainActivity : AppCompatActivity() {
 

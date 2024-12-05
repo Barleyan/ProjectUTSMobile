@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "141753563838",
+    "project_id": "project-uas-17406",
+    "storage_bucket": "project-uas-17406.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141753563838:android:8fff9249a4c7156759fcef",
+        "android_client_info": {
+          "package_name": "com.barleyan.managementoko"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVRl2l94s-9oFo6H0_Kbk8igCEVdDgMmw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

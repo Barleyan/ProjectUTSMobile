@@ -36,6 +36,7 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun updateTransaction(transaction: Transaction) {
         transactionDao.updateTransaction(transaction)
     }
+
 }
 
 

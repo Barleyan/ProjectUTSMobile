@@ -6,7 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "customer_table")
 data class Customer(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    var name: String,
-    var phoneNumber: String
+    var name: String = "",
+    var phoneNumber: String = ""
 )
+{
+    constructor(): this(0, "", "")
+}
 
