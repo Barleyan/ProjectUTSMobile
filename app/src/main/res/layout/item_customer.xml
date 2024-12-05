@@ -4,15 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    android:layout_margin="8dp">
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="@android:color/white">  <!-- Changed background to white -->
+        android:background="@android:color/white">
 
         <!-- Nama Pelanggan -->
         <TextView
@@ -23,9 +23,9 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnEditCustomer" />
 
         <!-- Nomor Telepon -->
         <TextView
@@ -34,36 +34,34 @@
             android:layout_height="wrap_content"
             android:text="Phone Number"
             android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+            app:layout_constraintEnd_toStartOf="@id/btnEditCustomer" />
 
-        <!-- Tombol Hapus Pelanggan -->
-        <ImageButton
-            android:id="@+id/btnDeleteCustomer"
-            android:layout_width="50dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/delete_customer"
-            android:src="@android:drawable/ic_delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Tombol Edit Pelanggan -->
+        <!-- Tombol Edit -->
         <ImageButton
             android:id="@+id/btnEditCustomer"
-            android:layout_width="50dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
             android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/edit_customer"
+            android:contentDescription="Edit Customer"
             android:src="@android:drawable/ic_menu_edit"
             app:layout_constraintEnd_toStartOf="@id/btnDeleteCustomer"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Tombol Hapus -->
+        <ImageButton
+            android:id="@+id/btnDeleteCustomer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="Delete Customer"
+            android:src="@android:drawable/ic_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

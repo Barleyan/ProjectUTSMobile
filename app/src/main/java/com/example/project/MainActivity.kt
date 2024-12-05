@@ -29,14 +29,11 @@ class MainActivity : AppCompatActivity() {
         // Set up GridLayoutManager with 2 columns
         val gridLayoutManager = GridLayoutManager(this, 2)
 
-        // Optionally, you can define how many spans an item should occupy
+        // Set up spanSizeLookup (optional, to customize the column span behavior)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                // Example: You can customize how many columns an item occupies
-                return when (position % 3) {
-                    0 -> 2 // For example, every third item takes 2 columns
-                    else -> 1 // Default is 1 column for the other items
-                }
+                // Example: every third item spans across 2 columns
+                return 1 // All items span 1 column, but you can customize this
             }
         }
 
