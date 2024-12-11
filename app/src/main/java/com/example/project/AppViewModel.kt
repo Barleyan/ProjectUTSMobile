@@ -31,86 +31,103 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         allTransactions = repository.allTransactions
     }
 
-    // Room Operations
+    // Room Operations with Firebase Sync
     fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertCustomer(customer)
-        saveCustomerToFirebase(customer) // Sync with Firebase
+        try {
+            repository.insertCustomer(customer)
+            customersRef.child(customer.id.toString()).setValue(customer)
+                .addOnSuccessListener { println("Customer inserted and synced with Firebase: ${customer.id}") }
+                .addOnFailureListener { e -> println("Error syncing customer to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error inserting customer: ${e.message}")
+        }
     }
 
     fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(customer)
-        deleteCustomerFromFirebase(customer.name) // Remove from Firebase
-    }
-
-    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertProduct(product)
-        saveProductToFirebase(product) // Sync with Firebase
-    }
-
-    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(product)
-        deleteProductFromFirebase(product.name2) // Remove from Firebase
-    }
-
-    fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateProduct(product)
-        saveProductToFirebase(product) // Sync with Firebase
+        try {
+            repository.delete(customer)
+            customersRef.child(customer.id.toString()).removeValue()
+                .addOnSuccessListener { println("Customer deleted from Firebase: ${customer.id}") }
+                .addOnFailureListener { e -> println("Error deleting customer from Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error deleting customer: ${e.message}")
+        }
     }
 
     fun updateCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateCustomer(customer)
-        saveCustomerToFirebase(customer) // Sync with Firebase
+        try {
+            repository.updateCustomer(customer)
+            customersRef.child(customer.id.toString()).setValue(customer)
+                .addOnSuccessListener { println("Customer updated and synced with Firebase: ${customer.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated customer to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating customer: ${e.message}")
+        }
+    }
+
+    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            repository.insertProduct(product)
+            productsRef.child(product.id.toString()).setValue(product)
+                .addOnSuccessListener { println("Product inserted and synced with Firebase: ${product.id}") }
+                .addOnFailureListener { e -> println("Error syncing product to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error inserting product: ${e.message}")
+        }
+    }
+
+    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            repository.delete(product)
+            productsRef.child(product.id.toString()).removeValue()
+                .addOnSuccessListener { println("Product deleted from Firebase: ${product.id}") }
+                .addOnFailureListener { e -> println("Error deleting product from Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error deleting product: ${e.message}")
+        }
+    }
+
+    fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            repository.updateProduct(product)
+            productsRef.child(product.id.toString()).setValue(product)
+                .addOnSuccessListener { println("Product updated and synced with Firebase: ${product.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated product to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating product: ${e.message}")
+        }
     }
 
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertTransaction(transaction)
-        saveTransactionToFirebase(transaction) // Sync with Firebase
+        try {
+            repository.insertTransaction(transaction)
+            transactionsRef.child(transaction.id.toString()).setValue(transaction)
+                .addOnSuccessListener { println("Transaction inserted and synced with Firebase: ${transaction.id}") }
+                .addOnFailureListener { e -> println("Error syncing transaction to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error inserting transaction: ${e.message}")
+        }
     }
 
     fun deleteTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(transaction)
-        deleteTransactionFromFirebase(transaction.quantity) // Remove from Firebase
+        try {
+            repository.delete(transaction)
+            transactionsRef.child(transaction.id.toString()).removeValue()
+                .addOnSuccessListener { println("Transaction deleted from Firebase: ${transaction.id}") }
+                .addOnFailureListener { e -> println("Error deleting transaction from Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error deleting transaction: ${e.message}")
+        }
     }
 
     fun updateTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateTransaction(transaction)
-        saveTransactionToFirebase(transaction) // Sync with Firebase
-    }
-
-    // Firebase Operations
-    private fun saveProductToFirebase(product: Product) {
-        productsRef.child(product.name2).setValue(product)
-            .addOnSuccessListener { println("Product saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving product: ${e.message}") }
-    }
-
-    private fun deleteProductFromFirebase(productId: String) {
-        productsRef.child(productId).removeValue()
-            .addOnSuccessListener { println("Product deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting product: ${e.message}") }
-    }
-
-    private fun saveCustomerToFirebase(customer: Customer) {
-        customersRef.child(customer.name).setValue(customer)
-            .addOnSuccessListener { println("Customer saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving customer: ${e.message}") }
-    }
-
-    private fun deleteCustomerFromFirebase(customerId: String) {
-        customersRef.child(customerId).removeValue()
-            .addOnSuccessListener { println("Customer deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting customer: ${e.message}") }
-    }
-
-    private fun saveTransactionToFirebase(transaction: Transaction) {
-        transactionsRef.child(transaction.quantity).setValue(transaction)
-            .addOnSuccessListener { println("Transaction saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving transaction: ${e.message}") }
-    }
-
-    private fun deleteTransactionFromFirebase(transactionId: String) {
-        transactionsRef.child(transactionId).removeValue()
-            .addOnSuccessListener { println("Transaction deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting transaction: ${e.message}") }
+        try {
+            repository.updateTransaction(transaction)
+            transactionsRef.child(transaction.id.toString()).setValue(transaction)
+                .addOnSuccessListener { println("Transaction updated and synced with Firebase: ${transaction.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated transaction to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating transaction: ${e.message}")
+        }
     }
 }
