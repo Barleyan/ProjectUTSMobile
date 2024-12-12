@@ -19,6 +19,9 @@ interface CustomerDao {
     @Query("SELECT * FROM customer_table")
     fun getAll(): Array<Customer>
 
+    @Query("SELECT MAX(id) FROM customer_table")
+    suspend fun getMaxId(): Int?
+
     @Delete
     suspend fun delete(customer: Customer)
 

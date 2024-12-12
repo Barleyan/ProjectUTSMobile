@@ -21,6 +21,17 @@ class Repository(private val productDao: ProductDao, private val customerDao: Cu
     suspend fun delete(customer: Customer) {
         customerDao.delete(customer)
     }
+    suspend fun getMaxCustomerId(): Int? {
+        return customerDao.getMaxId()
+    }
+
+    suspend fun getMaxProductId(): Int? {
+        return productDao.getMaxIdProduct()
+    }
+
+    suspend fun getMaxTransactionId(): Int? {
+        return transactionDao.getMaxIdTransaction()
+    }
     suspend fun delete(product: Product) {
         productDao.deleteproduct(product)
     }

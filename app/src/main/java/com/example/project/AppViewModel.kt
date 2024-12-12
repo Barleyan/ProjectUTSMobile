@@ -32,9 +32,37 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Room Operations with Firebase Sync
+//    fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
+//        try {
+//            repository.insertCustomer(customer)
+//            customersRef.child(customer.id.toString()).setValue(customer)
+//                .addOnSuccessListener { println("Customer inserted and synced with Firebase: ${customer.id}") }
+//                .addOnFailureListener { e -> println("Error syncing customer to Firebase: ${e.message}") }
+//        } catch (e: Exception) {
+//            println("Error inserting customer: ${e.message}")
+//        }
+//    }
+//
+//    fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
+//        try {
+//            repository.delete(customer)
+//            customersRef.child(customer.id.toString()).removeValue()
+//                .addOnSuccessListener { println("Customer deleted from Firebase: ${customer.id}") }
+//                .addOnFailureListener { e -> println("Error deleting customer from Firebase: ${e.message}") }
+//        } catch (e: Exception) {
+//            println("Error deleting customer: ${e.message}")
+//        }
+//    }
     fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         try {
+            // Get the current max ID or default to 0
+            val currentMaxId = repository.getMaxCustomerId() ?: 0
+            customer.id = currentMaxId + 1
+
+            // Insert into the database
             repository.insertCustomer(customer)
+
+            // Sync with Firebase
             customersRef.child(customer.id.toString()).setValue(customer)
                 .addOnSuccessListener { println("Customer inserted and synced with Firebase: ${customer.id}") }
                 .addOnFailureListener { e -> println("Error syncing customer to Firebase: ${e.message}") }
@@ -45,14 +73,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         try {
+            // Delete all customers in local database
             repository.delete(customer)
+
+            // Clear all data in Firebase
             customersRef.child(customer.id.toString()).removeValue()
-                .addOnSuccessListener { println("Customer deleted from Firebase: ${customer.id}") }
-                .addOnFailureListener { e -> println("Error deleting customer from Firebase: ${e.message}") }
+                .addOnSuccessListener { println("All customers deleted from Firebase") }
+                .addOnFailureListener { e -> println("Error deleting all customers from Firebase: ${e.message}") }
         } catch (e: Exception) {
-            println("Error deleting customer: ${e.message}")
+            println("Error deleting all customers: ${e.message}")
         }
     }
+
 
     fun updateCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         try {
@@ -67,6 +99,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
         try {
+            val currentMaxId = repository.getMaxProductId()?: 0
+            product.id = currentMaxId + 1
+
             repository.insertProduct(product)
             productsRef.child(product.id.toString()).setValue(product)
                 .addOnSuccessListener { println("Product inserted and synced with Firebase: ${product.id}") }
@@ -100,6 +135,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         try {
+            val currentMaxId = repository.getMaxTransactionId()?: 0
+            transaction.id = currentMaxId + 1
+
             repository.insertTransaction(transaction)
             transactionsRef.child(transaction.id.toString()).setValue(transaction)
                 .addOnSuccessListener { println("Transaction inserted and synced with Firebase: ${transaction.id}") }

@@ -16,7 +16,7 @@ class MainMenuActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
-            // Handle navigation icon press (if needed)
+            // Handle navigation icon press
         }
 
         // Get buttons

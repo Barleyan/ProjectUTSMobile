@@ -16,6 +16,9 @@ interface TransactionDao {
     @Query("SELECT * FROM transaction_table")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
+    @Query("SELECT MAX(id) FROM transaction_table")
+    suspend fun getMaxIdTransaction(): Int?
+
     @Delete
     suspend fun deleteTransaction(transaction: Transaction)
 
