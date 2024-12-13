@@ -60,35 +60,48 @@
             android:id="@+id/tvTotalPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Total Price: 0"
+            android:text="Total Price"
             app:layout_constraintTop_toBottomOf="@id/tvQuantity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Buttons: Edit and Delete -->
+        <!-- Amount -->
+        <TextView
+            android:id="@+id/tvTransactionAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalPrice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Buttons Layout -->
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="end">
-
-            <ImageButton
-                android:id="@+id/btnDeleteTransaction"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_delete"
-                android:background="?android:attr/selectableItemBackground" />
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionAmount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="end"
+            android:layout_marginTop="8dp">
 
             <ImageButton
                 android:id="@+id/btnEditTransaction"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="Edit"
                 android:src="@android:drawable/ic_menu_edit"
-                android:background="?android:attr/selectableItemBackground" />
+                android:layout_marginEnd="8dp" />
 
+            <ImageButton
+                android:id="@+id/btnDeleteTransaction"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="Delete"
+                android:src="@android:drawable/ic_delete" />
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

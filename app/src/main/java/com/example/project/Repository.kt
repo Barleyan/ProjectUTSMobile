@@ -1,13 +1,13 @@
 package com.barleyan.managementoko
 
 import androidx.lifecycle.LiveData
+import com.example.project.Product
 
 class Repository(
     private val productDao: ProductDao,
     private val customerDao: CustomerDao,
     private val transactionDao: TransactionDao
 ) {
-
     val allProducts: LiveData<List<Product>> = productDao.getAllProducts()
     val allCustomers: LiveData<List<Customer>> = customerDao.getAllCustomers()
     val allTransactions: LiveData<List<Transaction>> = transactionDao.getAllTransactions()

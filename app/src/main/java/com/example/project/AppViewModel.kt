@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.project.Product
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -33,51 +34,61 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         allTransactions = repository.allTransactions
     }
 
+    // Insert customer and save to Firebase
     fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertCustomer(customer)
         saveToFirebase(customersRef, customer.id.toString(), customer)
     }
 
+    // Delete customer and remove from Firebase
     fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteCustomer(customer)
         deleteFromFirebase(customersRef, customer.id.toString())
     }
 
-    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertProduct(product)
-        saveToFirebase(productsRef, product.id.toString(), product)
-    }
-
-    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteProduct(product)
-        deleteFromFirebase(productsRef, product.id.toString())
-    }
-
-    fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateProduct(product)
-        saveToFirebase(productsRef, product.id.toString(), product)
-    }
-
+    // Update customer and sync with Firebase
     fun updateCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateCustomer(customer)
         saveToFirebase(customersRef, customer.id.toString(), customer)
     }
 
+    // Insert product and save to Firebase
+    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertProduct(product)
+        saveToFirebase(productsRef, product.id.toString(), product)
+    }
+
+    // Delete product and remove from Firebase
+    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteProduct(product)
+        deleteFromFirebase(productsRef, product.id.toString())
+    }
+
+    // Update product and sync with Firebase
+    fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateProduct(product)
+        saveToFirebase(productsRef, product.id.toString(), product)
+    }
+
+    // Insert transaction and save to Firebase
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertTransaction(transaction)
         saveToFirebase(transactionsRef, transaction.id.toString(), transaction)
     }
 
+    // Delete transaction and remove from Firebase
     fun deleteTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteTransaction(transaction)
         deleteFromFirebase(transactionsRef, transaction.id.toString())
     }
 
+    // Update transaction and sync with Firebase
     fun updateTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateTransaction(transaction)
         saveToFirebase(transactionsRef, transaction.id.toString(), transaction)
     }
 
+    // Helper method to save data to Firebase
     private fun <T> saveToFirebase(ref: DatabaseReference, key: String, data: T) {
         ref.child(key).setValue(data)
             .addOnSuccessListener {
@@ -88,6 +99,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
+    // Helper method to delete data from Firebase
     private fun deleteFromFirebase(ref: DatabaseReference, key: String) {
         ref.child(key).removeValue()
             .addOnSuccessListener {

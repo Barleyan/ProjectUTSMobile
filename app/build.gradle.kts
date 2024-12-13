@@ -1,8 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") // Enable KSP plugin for Room and other annotations
-    alias(libs.plugins.google.gms.google.services) // For Firebase setup, assuming libs is configured
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
 }
 
 android {
@@ -31,15 +30,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
-    // Enable Data Binding and View Binding
     buildFeatures {
         dataBinding = true
         viewBinding = true
@@ -47,35 +45,40 @@ android {
 }
 
 dependencies {
+    val lifecycleVersion = "2.6.1"
+    val roomVersion = "2.6.1"
+    val coroutinesVersion = "1.7.3"
+    val navigationVersion = "2.7.4"
+    val firebaseBomVersion = "32.2.3"
+
     // Lifecycle components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
     // Core AndroidX dependencies
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.activity:activity-ktx:1.7.2")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.0")
-    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.activity:activity-ktx:1.8.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    implementation("com.google.android.material:material:1.10.0")
 
-    // Firebase dependencies (make sure these are the latest versions or use your `libs` block if needed)
-    implementation("com.google.firebase:firebase-auth:21.0.0")
-    implementation("com.google.firebase:firebase-database:20.0.0")
+    // Firebase dependencies using BoM
+    implementation(platform("com.google.firebase:firebase-bom:$firebaseBomVersion"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
 
     // Room Database dependencies
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version") // Use KSP for Room
-    implementation("androidx.room:room-ktx:$room_version")
-    androidTestImplementation("androidx.room:room-testing:$room_version")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    androidTestImplementation("androidx.room:room-testing:$roomVersion")
 
     // Coroutines for Room and async tasks
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
     // Retrofit for network requests
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -84,10 +87,8 @@ dependencies {
     // Testing dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0")
 
-    // Firebase Bom for ensuring consistent versions across all Firebase dependencies
-    implementation(platform("com.google.firebase:firebase-bom:31.0.0"))
-    implementation("com.google.firebase:firebase-database-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
+    // Optional: if you want to add KSP for Room, Retrofit, or other KSP-related libraries
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.10-1.0.16") // Only if using KSP for symbol processing
 }
