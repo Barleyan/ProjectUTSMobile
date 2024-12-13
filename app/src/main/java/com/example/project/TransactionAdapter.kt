@@ -1,4 +1,4 @@
-package com.example.project
+package com.barleyan.managementoko
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,8 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.barleyan.managementoko.MainActivityTransaction
-import com.barleyan.managementoko.R
+import com.barleyan.managementoko.fragments.TransactionFragment
 
 class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
@@ -20,7 +19,7 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.Transacti
         val productID: TextView = view.findViewById(R.id.tvProductId)
         val customerID: TextView = view.findViewById(R.id.tvCustomerId)
         val quantity: TextView = view.findViewById(R.id.tvQuantity)
-        val TotalPrice: TextView = view.findViewById(R.id.tvTotalPrice)
+        val totalPrice: TextView = view.findViewById(R.id.tvTotalPrice)
         val btnDeleteTransaction: ImageButton = view.findViewById(R.id.btnDeleteTransaction)
         val btnEditTransaction: ImageButton = view.findViewById(R.id.btnEditTransaction)
     }
@@ -33,10 +32,10 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.Transacti
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = getItem(position)
-        holder.productID.text = transaction.productId
-        holder.customerID.text = transaction.customerId
-        holder.quantity.text = transaction.quantity
-        holder.TotalPrice.text = transaction.totalPrice
+        holder.productID.text = transaction.productId.toString()  // Convert to string for display
+        holder.customerID.text = transaction.customerId.toString() // Convert to string for display
+        holder.quantity.text = transaction.quantity.toString()  // Convert to string for display
+        holder.totalPrice.text = transaction.totalPrice.toString()  // Convert to string for display
 
         holder.btnDeleteTransaction.setOnClickListener {
             showDeleteConfirmationDialog(holder.itemView.context, transaction, position)
@@ -50,10 +49,8 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.Transacti
     private fun showDeleteConfirmationDialog(context: Context, transaction: Transaction, position: Int) {
         AlertDialog.Builder(context)
             .setTitle("Hapus Transaksi")
-            .setMessage("Anda yakin ingin menghapus ${transaction.customerId}?")
-            .setPositiveButton("Ya") { _, _ ->
-                deleteTransaction(context, transaction, position)
-            }
+            .setMessage("Anda yakin ingin menghapus transaksi dengan ID pelanggan ${transaction.customerId}?")
+            .setPositiveButton("Ya") { _, _ -> deleteTransaction(context, transaction, position) }
             .setNegativeButton("Batal", null)
             .show()
     }
@@ -71,16 +68,16 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.Transacti
         val editQuantity = dialogView.findViewById<EditText>(R.id.etQuantityID)
         val editTotalPrice = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-        editProdukID.setText(transaction.productId)
-        editCustomerID.setText(transaction.customerId)
-        editQuantity.setText(transaction.quantity)
-        editTotalPrice.setText(transaction.totalPrice)
+        editProdukID.setText(transaction.productId.toString())  // Set the productId as string
+        editCustomerID.setText(transaction.customerId.toString())  // Set the customerId as string
+        editQuantity.setText(transaction.quantity.toString())  // Set quantity as string
+        editTotalPrice.setText(transaction.totalPrice.toString())  // Set totalPrice as string
 
         builder.setPositiveButton("Simpan") { _, _ ->
-            val newProduk = editProdukID.text.toString()
-            val newCustomer = editCustomerID.text.toString()
-            val newQuantity = editQuantity.text.toString()
-            val newTotalPrice = editTotalPrice.text.toString()
+            val newProduk = editProdukID.text.toString().toInt()
+            val newCustomer = editCustomerID.text.toString().toInt()
+            val newQuantity = editQuantity.text.toString().toInt()  // Convert to Int
+            val newTotalPrice = editTotalPrice.text.toString().toInt()  // Convert to Int
             updateTransaction(context, transaction, position, newProduk, newCustomer, newQuantity, newTotalPrice)
         }
         builder.setNegativeButton("Batal", null)
@@ -88,25 +85,26 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionAdapter.Transacti
         builder.show()
     }
 
-    private fun updateTransaction(context: Context, transaction: Transaction, position: Int, newProduk: String, newCustomer: String, newQuantity: String, newTotalPrice: String) {
+    private fun updateTransaction(context: Context, transaction: Transaction, position: Int, newProduk: Int, newCustomer: Int, newQuantity: Int, newTotalPrice: Int) {
         transaction.productId = newProduk
         transaction.customerId = newCustomer
         transaction.quantity = newQuantity
         transaction.totalPrice = newTotalPrice
-        (context as MainActivityTransaction).appViewModel.updateTransaction(transaction)
+        (context as TransactionFragment).appViewModel.updateTransaction(transaction)
 
         notifyItemChanged(position)
     }
 
     private fun deleteTransaction(context: Context, transaction: Transaction, position: Int) {
-        (context as MainActivityTransaction).appViewModel.deleteTransaction(transaction)
-        submitList(currentList.toMutableList().apply { removeAt(position) }) // Update list after deletion
+        (context as TransactionFragment).appViewModel.deleteTransaction(transaction)
+        val updatedList = currentList.toMutableList()
+        updatedList.removeAt(position)
+        submitList(updatedList) // Update list after deletion
     }
 
-    // DiffUtil callback for Transaction
     class TransactionDiffCallback : DiffUtil.ItemCallback<Transaction>() {
         override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem.id == newItem.id // Ensure each Transaction has a unique identifier
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {

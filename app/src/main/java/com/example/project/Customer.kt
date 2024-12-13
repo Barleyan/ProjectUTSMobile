@@ -1,4 +1,4 @@
-package com.example.project
+package com.barleyan.managementoko
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,7 +9,3 @@ data class Customer(
     var name: String = "",
     var phoneNumber: String = ""
 )
-{
-    constructor(): this(0, "", "")
-}
-

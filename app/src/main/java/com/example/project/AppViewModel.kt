@@ -1,20 +1,22 @@
-package com.example.project
+package com.barleyan.managementoko
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
+
     private val repository: Repository
     val allCustomers: LiveData<List<Customer>>
     val allProducts: LiveData<List<Product>>
     val allTransactions: LiveData<List<Transaction>>
 
-    // Firebase Realtime Database references
     private val firebaseDb = FirebaseDatabase.getInstance()
     private val productsRef = firebaseDb.getReference("products")
     private val customersRef = firebaseDb.getReference("customers")
@@ -31,86 +33,68 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         allTransactions = repository.allTransactions
     }
 
-    // Room Operations
     fun insertCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertCustomer(customer)
-        saveCustomerToFirebase(customer) // Sync with Firebase
+        saveToFirebase(customersRef, customer.id.toString(), customer)
     }
 
     fun deleteCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(customer)
-        deleteCustomerFromFirebase(customer.name) // Remove from Firebase
+        repository.deleteCustomer(customer)
+        deleteFromFirebase(customersRef, customer.id.toString())
     }
 
     fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertProduct(product)
-        saveProductToFirebase(product) // Sync with Firebase
+        saveToFirebase(productsRef, product.id.toString(), product)
     }
 
     fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(product)
-        deleteProductFromFirebase(product.name2) // Remove from Firebase
+        repository.deleteProduct(product)
+        deleteFromFirebase(productsRef, product.id.toString())
     }
 
     fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateProduct(product)
-        saveProductToFirebase(product) // Sync with Firebase
+        saveToFirebase(productsRef, product.id.toString(), product)
     }
 
     fun updateCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateCustomer(customer)
-        saveCustomerToFirebase(customer) // Sync with Firebase
+        saveToFirebase(customersRef, customer.id.toString(), customer)
     }
 
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertTransaction(transaction)
-        saveTransactionToFirebase(transaction) // Sync with Firebase
+        saveToFirebase(transactionsRef, transaction.id.toString(), transaction)
     }
 
     fun deleteTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(transaction)
-        deleteTransactionFromFirebase(transaction.quantity) // Remove from Firebase
+        repository.deleteTransaction(transaction)
+        deleteFromFirebase(transactionsRef, transaction.id.toString())
     }
 
     fun updateTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateTransaction(transaction)
-        saveTransactionToFirebase(transaction) // Sync with Firebase
+        saveToFirebase(transactionsRef, transaction.id.toString(), transaction)
     }
 
-    // Firebase Operations
-    private fun saveProductToFirebase(product: Product) {
-        productsRef.child(product.name2).setValue(product)
-            .addOnSuccessListener { println("Product saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving product: ${e.message}") }
+    private fun <T> saveToFirebase(ref: DatabaseReference, key: String, data: T) {
+        ref.child(key).setValue(data)
+            .addOnSuccessListener {
+                Log.d("AppViewModel", "Data berhasil disimpan ke Firebase")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AppViewModel", "Gagal menyimpan data ke Firebase", exception)
+            }
     }
 
-    private fun deleteProductFromFirebase(productId: String) {
-        productsRef.child(productId).removeValue()
-            .addOnSuccessListener { println("Product deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting product: ${e.message}") }
-    }
-
-    private fun saveCustomerToFirebase(customer: Customer) {
-        customersRef.child(customer.name).setValue(customer)
-            .addOnSuccessListener { println("Customer saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving customer: ${e.message}") }
-    }
-
-    private fun deleteCustomerFromFirebase(customerId: String) {
-        customersRef.child(customerId).removeValue()
-            .addOnSuccessListener { println("Customer deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting customer: ${e.message}") }
-    }
-
-    private fun saveTransactionToFirebase(transaction: Transaction) {
-        transactionsRef.child(transaction.quantity).setValue(transaction)
-            .addOnSuccessListener { println("Transaction saved to Firebase successfully") }
-            .addOnFailureListener { e -> println("Error saving transaction: ${e.message}") }
-    }
-
-    private fun deleteTransactionFromFirebase(transactionId: String) {
-        transactionsRef.child(transactionId).removeValue()
-            .addOnSuccessListener { println("Transaction deleted from Firebase successfully") }
-            .addOnFailureListener { e -> println("Error deleting transaction: ${e.message}") }
+    private fun deleteFromFirebase(ref: DatabaseReference, key: String) {
+        ref.child(key).removeValue()
+            .addOnSuccessListener {
+                Log.d("AppViewModel", "Data berhasil dihapus dari Firebase")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AppViewModel", "Gagal menghapus data dari Firebase", exception)
+            }
     }
 }

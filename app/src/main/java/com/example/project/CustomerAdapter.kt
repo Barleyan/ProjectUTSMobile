@@ -1,19 +1,25 @@
+package com.barleyan.managementoko.adapters
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.barleyan.managementoko.MainActivity
+import com.barleyan.managementoko.Customer
 import com.barleyan.managementoko.R
-import com.example.project.Customer
 import com.google.android.material.textfield.TextInputEditText
 
-class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.CustomerViewHolder>(CustomerDiffCallback()) {
+class CustomerAdapter(
+    private val context: Context,
+    private val onDelete: (Customer) -> Unit,
+    private val onEdit: (Customer) -> Unit
+) : ListAdapter<Customer, CustomerAdapter.CustomerViewHolder>(CustomerDiffCallback()) {
 
     inner class CustomerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val customerName: TextView = view.findViewById(R.id.tvCustomerName)
@@ -33,25 +39,27 @@ class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.CustomerViewHolder
         holder.customerName.text = customer.name
         holder.customerPhone.text = customer.phoneNumber
 
+        // Handling delete action
         holder.btnDeleteCustomer.setOnClickListener {
-            showDeleteConfirmationDialog(holder.itemView.context, customer, position)
+            showDeleteConfirmationDialog(customer)
         }
 
+        // Handling edit action
         holder.btnEditCustomer.setOnClickListener {
-            showEditCustomerDialog(holder.itemView.context, customer, position)
+            showEditCustomerDialog(customer)
         }
     }
 
-    private fun showDeleteConfirmationDialog(context: Context, customer: Customer, position: Int) {
+    private fun showDeleteConfirmationDialog(customer: Customer) {
         AlertDialog.Builder(context)
             .setTitle("Hapus Pelanggan")
             .setMessage("Anda yakin ingin menghapus ${customer.name}?")
-            .setPositiveButton("Ya") { _, _ -> deleteCustomer(context, customer, position) }
+            .setPositiveButton("Ya") { _, _ -> onDelete(customer) }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    private fun showEditCustomerDialog(context: Context, customer: Customer, position: Int) {
+    private fun showEditCustomerDialog(customer: Customer) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Edit Pelanggan")
 
@@ -62,47 +70,37 @@ class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.CustomerViewHolder
         val editName = dialogView.findViewById<TextInputEditText>(R.id.etName)
         val editPhone = dialogView.findViewById<TextInputEditText>(R.id.etPhone)
 
+        // Pre-fill the fields with current customer data
         editName.setText(customer.name)
         editPhone.setText(customer.phoneNumber)
 
         builder.setPositiveButton("Simpan") { dialog, _ ->
             val newName = editName.text.toString().trim()
             val newPhone = editPhone.text.toString().trim()
+
             if (newName.isNotEmpty() && newPhone.isNotEmpty()) {
-                updateCustomer(context, customer, position, newName, newPhone)
+                // Update the customer and notify adapter
+                val updatedCustomer = customer.copy(name = newName, phoneNumber = newPhone)
+                onEdit(updatedCustomer)
                 dialog.dismiss()
             } else {
                 if (newName.isEmpty()) editName.error = "Nama tidak boleh kosong"
                 if (newPhone.isEmpty()) editPhone.error = "Nomor telepon tidak boleh kosong"
             }
         }
-        builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
 
+        builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
 
-    private fun updateCustomer(context: Context, customer: Customer, position: Int, newName: String, newPhone: String) {
-        customer.name = newName
-        customer.phoneNumber = newPhone
-        (context as MainActivity).appViewModel.updateCustomer(customer)
-
-        notifyItemChanged(position)
-    }
-
-    private fun deleteCustomer(context: Context, customer: Customer, position: Int) {
-        (context as MainActivity).appViewModel.deleteCustomer(customer)
-
-        submitList(currentList.toMutableList().apply { removeAt(position) })
-    }
-
-    // Custom DiffUtil Callback
+    // Custom DiffUtil Callback for comparing customer items
     class CustomerDiffCallback : DiffUtil.ItemCallback<Customer>() {
         override fun areItemsTheSame(oldItem: Customer, newItem: Customer): Boolean {
-            return oldItem.id == newItem.id // Use a unique identifier for comparison
+            return oldItem.id == newItem.id // Use a unique identifier (ID) for comparison
         }
 
         override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
-            return oldItem == newItem
+            return oldItem == newItem // Check if the contents are the same
         }
     }
 }

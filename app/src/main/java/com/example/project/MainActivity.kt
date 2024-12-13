@@ -1,95 +1,51 @@
 package com.barleyan.managementoko
 
-import CustomerAdapter
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.project.AppViewModel
-import com.example.project.Customer
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import android.app.AlertDialog
+import androidx.fragment.app.Fragment
+import com.barleyan.managementoko.HomeFragment
+import com.barleyan.managementoko.fragments.ProductFragment
+import com.barleyan.managementoko.fragments.TransactionFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var appViewModel: AppViewModel
-    private lateinit var customerAdapter: CustomerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        // Set up GridLayoutManager with 2 columns
-        val gridLayoutManager = GridLayoutManager(this, 2)
-
-        // Set up spanSizeLookup (optional, to customize the column span behavior)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                // Example: every third item spans across 2 columns
-                return 1 // All items span 1 column, but you can customize this
-            }
+        if (savedInstanceState == null) {
+            loadFragment(HomeFragment())
         }
 
-        recyclerView.layoutManager = gridLayoutManager
-
-        // Initialize the adapter without passing an initial list
-        customerAdapter = CustomerAdapter()
-        recyclerView.adapter = customerAdapter
-
-        // Set up the ViewModel and observe the data
-        appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        appViewModel.allCustomers.observe(this) { customers ->
-            customers?.let {
-                customerAdapter.submitList(it) // Use submitList to update the adapter's list
-            }
-        }
-
-        // Set up FloatingActionButton for adding a customer
-        val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
-        fabAdd.setOnClickListener {
-            showAddCustomerDialog()
-        }
-    }
-
-    private fun showAddCustomerDialog() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_customer, null)
-        val customerNameInput = dialogView.findViewById<EditText>(R.id.etName)
-        val customerPhoneInput = dialogView.findViewById<EditText>(R.id.etPhone)
-
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Tambah Client")
-            .setView(dialogView)
-            .setPositiveButton("Tambah") { _, _ -> }
-            .setNegativeButton("Batal", null)
-            .create()
-
-        dialog.show()
-
-        // Validate inputs before inserting a new customer
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val name = customerNameInput.text.toString().trim()
-            val phoneNumber = customerPhoneInput.text.toString().trim()
-
-            if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
-                val newCustomer = Customer(name = name, phoneNumber = phoneNumber)
-                appViewModel.insertCustomer(newCustomer)
-                dialog.dismiss()
-            } else {
-                if (name.isEmpty()) customerNameInput.error = "Nama tidak boleh kosong"
-                if (phoneNumber.isEmpty()) customerPhoneInput.error = "Nomor telepon tidak boleh kosong"
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+                R.id.navigation_customer -> {
+                    loadFragment(CustomerFragment())
+                    true
+                }
+                R.id.navigation_product -> {
+                    loadFragment(ProductFragment())
+                    true
+                }
+                R.id.navigation_transaction -> {
+                    loadFragment(TransactionFragment())
+                    true
+                }
+                else -> false
             }
         }
     }
 
-    private fun deleteCustomer(customer: Customer) {
-        appViewModel.deleteCustomer(customer)
-        Toast.makeText(this, "${customer.name} has been deleted", Toast.LENGTH_SHORT).show()
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }

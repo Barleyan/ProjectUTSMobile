@@ -1,4 +1,4 @@
-package com.example.project
+package com.barleyan.managementoko
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -7,21 +7,20 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface CustomerDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+
+    @Insert
     suspend fun insertCustomer(customer: Customer)
 
-    @Query("SELECT * FROM customer_table")
-    fun getAllCustomers(): LiveData<List<Customer>>
-
-    @Query("SELECT * FROM customer_table")
-    fun getAll(): Array<Customer>
+    @Update
+    suspend fun update(customer: Customer)
 
     @Delete
     suspend fun delete(customer: Customer)
 
-    @Update
-    suspend fun update(customer: Customer)
+    @Query("SELECT * FROM customer_table")
+    fun getAllCustomers(): LiveData<List<Customer>>
 }

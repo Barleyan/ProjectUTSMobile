@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header Section with background decoration -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvHeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Elektronik Shop"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHeaderSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Your One-Stop Shop Management Solution"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Welcome Message -->
+    <TextView
+        android:id="@+id/tvHeaderTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Elektronik Shop"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- ImageView for the app-related image -->
+    <ImageView
+        android:id="@+id/ivAppImage"
+        android:layout_width="241dp"
+        android:layout_height="242dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/white"
+        android:contentDescription="App Image"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:src="@drawable/logo_toko_depan" />
+
+    <!-- Description about the app -->
+    <TextView
+        android:id="@+id/tvAppDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This application helps you manage your products, customers, and transactions with ease."
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>

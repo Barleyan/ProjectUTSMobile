@@ -65,43 +65,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Group Container for Buttons -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Buttons: Edit and Delete -->
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalPrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_marginTop="8dp"
+            android:gravity="end">
 
-            <!-- Delete Button -->
             <ImageButton
                 android:id="@+id/btnDeleteTransaction"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/delete_customer"
                 android:src="@android:drawable/ic_delete"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:background="?android:attr/selectableItemBackground" />
 
-            <!-- Edit Button -->
             <ImageButton
                 android:id="@+id/btnEditTransaction"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="64dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/edit_customer"
+                android:layout_marginStart="8dp"
                 android:src="@android:drawable/ic_menu_edit"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:background="?android:attr/selectableItemBackground" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>
