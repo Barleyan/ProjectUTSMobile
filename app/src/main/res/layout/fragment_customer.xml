@@ -55,6 +55,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:layout_marginBottom="72dp"
+            android:contentDescription="TODO"
             android:src="@drawable/ic_add" /> <!-- Margin adjusted for visibility above BottomNavigationView -->
     </FrameLayout>
 
