@@ -8,4 +8,6 @@
     <string name="elektronik_shop">ELEKTRONIK SHOP</string>
     <string name="delete_product">Delete Product</string>
     <string name="edit_product">Edit Product</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
 </resources>

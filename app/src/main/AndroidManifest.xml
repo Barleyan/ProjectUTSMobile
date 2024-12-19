@@ -23,7 +23,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Fragments do not need to be declared here -->
+        <!-- Activity untuk mengatur PIN Lock jika fitur keamanan diaktifkan -->
+        <activity android:name=".PinLockActivity"
+            android:label="Pin Lock"
+            android:exported="false"/>
+
+        <!-- Tambahkan activity lain sesuai kebutuhan seperti notifikasi atau lainnya -->
+
     </application>
 
 </manifest>
