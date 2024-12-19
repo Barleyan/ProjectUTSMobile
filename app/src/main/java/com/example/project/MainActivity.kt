@@ -35,9 +35,14 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(TransactionFragment())
                     true
                 }
+                R.id.navigation_settings -> {
+                    loadFragment(SettingsFragment())
+                    true
+                }
                 else -> false
             }
         }
+
     }
 
     fun loadFragment(fragment: Fragment) {
