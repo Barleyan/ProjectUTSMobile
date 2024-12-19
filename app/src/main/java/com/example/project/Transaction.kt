@@ -1,14 +1,16 @@
-package com.barleyan.managementoko
+package com.example.project
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "transaction_table")
 data class Transaction(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val productId: String,
-    val customerId: String,
-    val quantity: String,
-    val totalPrice: String,
-    val amount: Double
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var productId: String = "",
+    var customerId: String = "",
+    var quantity: String ="",
+    var totalPrice: String = "",
 )
+{
+    constructor(): this(0, "", "", "","")
+}

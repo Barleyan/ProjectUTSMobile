@@ -1,4 +1,4 @@
-package com.barleyan.managementoko.fragments
+package com.barleyan.managementoko
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,138 +8,148 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.barleyan.managementoko.AppViewModel
-import com.barleyan.managementoko.R
-import com.barleyan.managementoko.Transaction
-import com.example.project.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.project.AppViewModel
+import com.example.project.Transaction
 
 class TransactionFragment : Fragment() {
 
-    // Correctly initialize the appViewModel using viewModels() delegate
-    private val appViewModel: AppViewModel by viewModels()
-
+    private lateinit var appViewModel: AppViewModel
     private lateinit var transactionAdapter: TransactionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_transaction, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        // Initialize RecyclerView
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        setupRecyclerView(recyclerView)
 
-        transactionAdapter = TransactionAdapter(
-            onEdit = { transaction -> showEditTransactionDialog(transaction) },
-            onDelete = { transaction -> deleteTransaction(transaction) }
-        )
-        recyclerView.adapter = transactionAdapter
+        // Initialize ViewModel
+        appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
+        // Observe transaction data from ViewModel
         appViewModel.allTransactions.observe(viewLifecycleOwner) { transactions ->
             transactions?.let {
-                transactionAdapter.submitList(it)
+                transactionAdapter.submitList(it) // Update the adapter's list
             }
         }
 
+        // Setup FloatingActionButton for adding new transactions
         val fabAdd: FloatingActionButton = view.findViewById(R.id.fabAdd)
         fabAdd.setOnClickListener {
             showAddTransactionDialog()
         }
     }
 
-    private fun showAddTransactionDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_transaction, null)
-        val produkIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
-        val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
-        val quantityInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
-        val totalPriceInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
+        // Use a GridLayoutManager with 2 columns
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.layoutManager = gridLayoutManager
 
-        AlertDialog.Builder(requireContext())
+        // Initialize the adapter and pass the context correctly
+        transactionAdapter = TransactionAdapter(
+            requireContext(), // Pass the context here
+            onDelete = { transaction ->
+                appViewModel.deleteTransaction(transaction)
+                Toast.makeText(requireContext(), "Transaksi ${transaction.productId} telah dihapus", Toast.LENGTH_SHORT).show()
+            },
+            onEdit = { transaction ->
+                showEditTransactionDialog(transaction)
+            }
+        )
+        recyclerView.adapter = transactionAdapter
+    }
+
+    private fun showAddTransactionDialog() {
+        // Inflate the custom dialog view
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_transaction, null)
+        val productIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
+        val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
+        val quantityIDInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
+        val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
+
+        // Build the dialog
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Tambah Transaksi")
             .setView(dialogView)
-            .setPositiveButton("Tambah") { _, _ ->
-                val produkID = produkIDInput.text.toString().trim()
-                val customerID = customerIDInput.text.toString().trim()
-                val quantity = quantityInput.text.toString().trim()
-                val totalPrice = totalPriceInput.text.toString().trim()
-
-                if (produkID.isEmpty() || customerID.isEmpty() || quantity.isEmpty() || totalPrice.isEmpty()) {
-                    Toast.makeText(requireContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
-                } else {
-                    val newTransaction = Transaction(
-                        productId = produkID,
-                        customerId = customerID,
-                        quantity = quantity.toInt().toString(),
-                        totalPrice = totalPrice.toDouble().toString(),
-                        amount = 0.0 // Assuming amount calculation is done elsewhere
-                    )
-                    appViewModel.insertTransaction(newTransaction)
-                    Toast.makeText(requireContext(), "Transaksi berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                }
-            }
+            .setPositiveButton("Tambah") { _, _ -> }
             .setNegativeButton("Batal", null)
             .create()
-            .show()
+
+        dialog.show()
+
+        // Validate input before adding a transaction
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val productId = productIDInput.text.toString().trim()
+            val customerId = customerIDInput.text.toString().trim()
+            val quantity = quantityIDInput.text.toString().trim()
+            val totalPrice = totalPriceIDInput.text.toString().trim()
+
+            if (productId.isNotEmpty() && customerId.isNotEmpty() && quantity.isNotEmpty()) {
+                val newTransaction = Transaction(
+                    productId = productId, customerId = customerId, quantity = quantity, totalPrice = totalPrice)
+                appViewModel.insertTransaction(newTransaction)
+                dialog.dismiss()
+            } else {
+                // Show error messages
+                if (productId.isEmpty()) productIDInput.error = "ID Produk tidak boleh kosong"
+                if (customerId.isEmpty()) customerIDInput.error = "ID Customer tidak boleh kosong"
+                if (quantity.isEmpty()) quantityIDInput.error = "Quantity tidak boleh kosong"
+            }
+        }
     }
 
     private fun showEditTransactionDialog(transaction: Transaction) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_transaction, null)
-        val produkIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
-        val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
-        val quantityInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
-        val totalPriceInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Edit Transaksi")
 
-        // Prefill the dialog with existing transaction data
-        produkIDInput.setText(transaction.productId)
-        customerIDInput.setText(transaction.customerId)
-        quantityInput.setText(transaction.quantity.toString())
-        totalPriceInput.setText(transaction.totalPrice.toString())
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.dialog_add_transaction, null)
+        builder.setView(dialogView)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Edit Transaksi")
-            .setView(dialogView)
-            .setPositiveButton("Simpan") { _, _ ->
-                val produkID = produkIDInput.text.toString().trim()
-                val customerID = customerIDInput.text.toString().trim()
-                val quantity = quantityInput.text.toString().trim()
-                val totalPrice = totalPriceInput.text.toString().trim()
+        val editProductId = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
+        val editCustomerId = dialogView.findViewById<EditText>(R.id.etCustomerID)
+        val editQuantity = dialogView.findViewById<EditText>(R.id.etQuantityID)
+        val editTotalPrice = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-                if (produkID.isEmpty() || customerID.isEmpty() || quantity.isEmpty() || totalPrice.isEmpty()) {
-                    Toast.makeText(requireContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
-                } else {
-                    val updatedTransaction = transaction.copy(
-                        productId = produkID,
-                        customerId = customerID,
-                        quantity = quantity.toInt().toString(),
-                        totalPrice = totalPrice.toDouble().toString()
-                    )
-                    appViewModel.updateTransaction(updatedTransaction)
-                    Toast.makeText(requireContext(), "Transaksi berhasil diperbarui", Toast.LENGTH_SHORT).show()
-                }
+        // Pre-fill the fields with current transaction data
+        editProductId.setText(transaction.productId)
+        editCustomerId.setText(transaction.customerId)
+        editQuantity.setText(transaction.quantity)
+        editTotalPrice.setText(transaction.totalPrice)
+
+        builder.setPositiveButton("Simpan") { dialog, _ ->
+            val newProductId = editProductId.text.toString().trim()
+            val newCustomerId = editCustomerId.text.toString().trim()
+            val newQuantity = editQuantity.text.toString().trim()
+            val newTotalPrice = editTotalPrice.text.toString().trim()
+
+            if (newProductId.isNotEmpty() && newCustomerId.isNotEmpty() && newQuantity.isNotEmpty()) {
+                transaction.productId = newProductId
+                transaction.customerId = newCustomerId
+                transaction.quantity = newQuantity
+                transaction.totalPrice = newTotalPrice
+                appViewModel.updateTransaction(transaction)
+                dialog.dismiss()
+            } else {
+                if (newProductId.isEmpty()) editProductId.error = "ID Produk tidak boleh kosong"
+                if (newCustomerId.isEmpty()) editCustomerId.error = "ID Customer tidak boleh kosong"
+                if (newQuantity.isEmpty()) editQuantity.error = "Quantity tidak boleh kosong"
             }
-            .setNegativeButton("Batal", null)
-            .create()
-            .show()
-    }
+        }
 
-    private fun deleteTransaction(transaction: Transaction) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Hapus Transaksi")
-            .setMessage("Apakah Anda yakin ingin menghapus transaksi ini?")
-            .setPositiveButton("Hapus") { _, _ ->
-                appViewModel.deleteTransaction(transaction)
-                Toast.makeText(requireContext(), "Transaksi berhasil dihapus", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Batal", null)
-            .create()
-            .show()
+        builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 }

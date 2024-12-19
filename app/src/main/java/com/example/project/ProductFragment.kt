@@ -1,4 +1,4 @@
-package com.barleyan.managementoko.fragments
+package com.barleyan.managementoko
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -11,11 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.barleyan.managementoko.AppViewModel
-import com.barleyan.managementoko.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.project.AppViewModel
 import com.example.project.Product
 import com.example.project.ProductAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ProductFragment : Fragment() {
 
@@ -26,107 +25,125 @@ class ProductFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_product, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        // Initialize RecyclerView
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        setupRecyclerView(recyclerView)
 
-        // Initialize the adapter and set it to the RecyclerView
+        // Initialize ViewModel
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        productAdapter = ProductAdapter(
-            onEdit = { product ->
-                // Handle the product edit action
-                showEditProductDialog(product)
-            },
-            onDelete = { product ->
-                appViewModel.deleteProduct(product)
-                Toast.makeText(requireContext(), "Produk dihapus", Toast.LENGTH_SHORT).show()
-            }
-        )
-        recyclerView.adapter = productAdapter
 
-        // Observe LiveData for all products and update the adapter when data changes
+        // Observe product data from ViewModel
         appViewModel.allProducts.observe(viewLifecycleOwner) { products ->
             products?.let {
-                productAdapter.submitList(it)
+                productAdapter.submitList(it) // Update the adapter's list
             }
         }
 
-        // Handle the FloatingActionButton click to add a new product
+        // Setup FloatingActionButton for adding new products
         val fabAdd: FloatingActionButton = view.findViewById(R.id.fabAdd)
         fabAdd.setOnClickListener {
             showAddProductDialog()
         }
     }
 
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
+        // Use a GridLayoutManager with 2 columns
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.layoutManager = gridLayoutManager
+
+        // Initialize the adapter and pass the context correctly
+        productAdapter = ProductAdapter(
+            requireContext(), // Pass the context here
+            onDelete = { product ->
+                appViewModel.deleteProduct(product)
+                Toast.makeText(requireContext(), "${product.name2} telah dihapus", Toast.LENGTH_SHORT).show()
+            },
+            onEdit = { product ->
+                showEditProductDialog(product)
+            }
+        )
+        recyclerView.adapter = productAdapter
+    }
+
     private fun showAddProductDialog() {
+        // Inflate the custom dialog view
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_product, null)
         val productNameInput = dialogView.findViewById<EditText>(R.id.etName2)
         val productPriceInput = dialogView.findViewById<EditText>(R.id.etPrice)
         val productStockInput = dialogView.findViewById<EditText>(R.id.etStok)
 
-        AlertDialog.Builder(requireContext())
+        // Build the dialog
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Tambah Produk")
             .setView(dialogView)
-            .setPositiveButton("Tambah") { _, _ ->
-                val name = productNameInput.text.toString().trim()
-                val price = productPriceInput.text.toString().trim()
-                val stock = productStockInput.text.toString().trim()
-
-                if (name.isNotEmpty() && price.isNotEmpty() && stock.isNotEmpty()) {
-                    try {
-                        val newProduct = Product(name = name, price = price.toDouble().toString(), stock = stock.toInt().toString())
-                        appViewModel.insertProduct(newProduct)
-                        Toast.makeText(requireContext(), "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Gagal menambahkan produk: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
-                }
-            }
+            .setPositiveButton("Tambah") { _, _ -> }
             .setNegativeButton("Batal", null)
             .create()
-            .show()
+
+        dialog.show()
+
+        // Validate input before adding a product
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val name = productNameInput.text.toString().trim()
+            val price = productPriceInput.text.toString().trim()
+            val stock = productStockInput.text.toString().trim()
+
+            if (name.isNotEmpty() && price.isNotEmpty() && stock.isNotEmpty()) {
+                val newProduct = Product(name2 = name, price = price, stock = stock)
+                appViewModel.insertProduct(newProduct)
+                dialog.dismiss()
+            } else {
+                // Show error messages
+                if (name.isEmpty()) productNameInput.error = "Nama tidak boleh kosong"
+                if (price.isEmpty()) productPriceInput.error = "Harga tidak boleh kosong"
+                if (stock.isEmpty()) productStockInput.error = "Stok tidak boleh kosong"
+            }
+        }
     }
 
     private fun showEditProductDialog(product: Product) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_product, null)
-        val productNameInput = dialogView.findViewById<EditText>(R.id.etName2)
-        val productPriceInput = dialogView.findViewById<EditText>(R.id.etPrice)
-        val productStockInput = dialogView.findViewById<EditText>(R.id.etStok)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Edit Produk")
 
-        // Pre-fill the inputs with existing product details
-        productNameInput.setText(product.name)
-        productPriceInput.setText(product.price)
-        productStockInput.setText(product.stock)
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.dialog_add_product, null)
+        builder.setView(dialogView)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Edit Produk")
-            .setView(dialogView)
-            .setPositiveButton("Simpan") { _, _ ->
-                val name = productNameInput.text.toString().trim()
-                val price = productPriceInput.text.toString().trim()
-                val stock = productStockInput.text.toString().trim()
+        val editName = dialogView.findViewById<EditText>(R.id.etName2)
+        val editPrice = dialogView.findViewById<EditText>(R.id.etPrice)
+        val editStock = dialogView.findViewById<EditText>(R.id.etStok)
 
-                if (name.isNotEmpty() && price.isNotEmpty() && stock.isNotEmpty()) {
-                    try {
-                        val updatedProduct = product.copy(name = name, price = price, stock = stock)
-                        appViewModel.updateProduct(updatedProduct)
-                        Toast.makeText(requireContext(), "Produk berhasil diperbarui", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Gagal memperbarui produk: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
-                }
+        // Pre-fill the fields with current product data
+        editName.setText(product.name2)
+        editPrice.setText(product.price)
+        editStock.setText(product.stock)
+
+        builder.setPositiveButton("Simpan") { dialog, _ ->
+            val newName = editName.text.toString().trim()
+            val newPrice = editPrice.text.toString().trim()
+            val newStock = editStock.text.toString().trim()
+
+            if (newName.isNotEmpty() && newPrice.isNotEmpty() && newStock.isNotEmpty()) {
+                product.name2 = newName
+                product.price = newPrice
+                product.stock = newStock
+                appViewModel.updateProduct(product)
+                dialog.dismiss()
+            } else {
+                if (newName.isEmpty()) editName.error = "Nama tidak boleh kosong"
+                if (newPrice.isEmpty()) editPrice.error = "Harga tidak boleh kosong"
+                if (newStock.isEmpty()) editStock.error = "Stok tidak boleh kosong"
             }
-            .setNegativeButton("Batal", null)
-            .create()
-            .show()
+        }
+
+        builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 }

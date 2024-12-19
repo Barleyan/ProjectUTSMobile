@@ -10,10 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.barleyan.managementoko.R
 import com.barleyan.managementoko.adapters.CustomerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.app.AlertDialog
+import com.example.project.AppViewModel
+import com.example.project.Customer
 
 class CustomerFragment : Fragment() {
 

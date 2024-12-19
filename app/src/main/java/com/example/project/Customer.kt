@@ -1,15 +1,14 @@
-package com.barleyan.managementoko
+package com.example.project
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "customer_table")
 data class Customer(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var name: String = "",
     var phoneNumber: String = ""
-) {
-    // Default constructor for Room Database
-    constructor() : this(0, "", "")
+)
+{
+    constructor(): this(0, "", "")
 }

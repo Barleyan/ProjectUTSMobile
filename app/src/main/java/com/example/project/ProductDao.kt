@@ -1,8 +1,12 @@
-package com.barleyan.managementoko
+package com.example.project
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
-import com.example.project.Product
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface ProductDao {
@@ -12,12 +16,9 @@ interface ProductDao {
     @Query("SELECT * FROM product_table")
     fun getAllProducts(): LiveData<List<Product>>
 
-    @Query("SELECT MAX(id) FROM product_table")
-    suspend fun getMaxIdProduct(): Int?
-
     @Delete
-    suspend fun deleteProduct(product: Product)
+    suspend fun deleteproduct(product: Product)
 
     @Update
-    suspend fun updateProduct(product: Product)
+    suspend fun updateproduct(product: Product)
 }
