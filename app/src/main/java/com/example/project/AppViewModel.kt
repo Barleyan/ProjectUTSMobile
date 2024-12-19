@@ -53,13 +53,25 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateProduct(product)
-        saveProductToFirebase(product) // Sync with Firebase
+        try {
+            repository.updateProduct(product)
+            productsRef.child(product.id.toString()).setValue(product)
+                .addOnSuccessListener { println("Product updated and synced with Firebase: ${product.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated product to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating product: ${e.message}")
+        }
     }
 
     fun updateCustomer(customer: Customer) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateCustomer(customer)
-        saveCustomerToFirebase(customer) // Sync with Firebase
+        try {
+            repository.updateCustomer(customer)
+            customersRef.child(customer.id.toString()).setValue(customer)
+                .addOnSuccessListener { println("Customer updated and synced with Firebase: ${customer.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated customer to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating customer: ${e.message}")
+        }
     }
 
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
@@ -73,8 +85,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateTransaction(transaction: Transaction) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateTransaction(transaction)
-        saveTransactionToFirebase(transaction) // Sync with Firebase
+        try {
+            repository.updateTransaction(transaction)
+            transactionsRef.child(transaction.id.toString()).setValue(transaction)
+                .addOnSuccessListener { println("Transaction updated and synced with Firebase: ${transaction.id}") }
+                .addOnFailureListener { e -> println("Error syncing updated transaction to Firebase: ${e.message}") }
+        } catch (e: Exception) {
+            println("Error updating transaction: ${e.message}")
+        }
     }
 
     // Firebase Operations

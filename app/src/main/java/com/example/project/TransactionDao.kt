@@ -11,14 +11,20 @@ import androidx.room.Update
 @Dao
 interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTransaction(transaction: Transaction)
+    fun insertTransaction(transaction: Transaction)
 
     @Query("SELECT * FROM transaction_table")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
+    @Query("SELECT MAX(id) FROM transaction_table")
+    suspend fun getMaxIdTransaction(): Int?
+
+    @Query("SELECT * FROM transaction_table")
+    fun getAll(): Array<Transaction>
+
     @Delete
-    suspend fun deleteTransaction(transaction: Transaction)
+    fun deleteTransaction(transaction: Transaction)
 
     @Update
-    suspend fun updateTransaction(transaction: Transaction)
+    fun updateTransaction(transaction: Transaction)
 }
