@@ -8,7 +8,7 @@ data class Product(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var name2: String = "",
     var price: String = "",
-    var stock: String = ""
+    var stock: String = "",
 )
 {
     constructor(): this(0, "", "", "")

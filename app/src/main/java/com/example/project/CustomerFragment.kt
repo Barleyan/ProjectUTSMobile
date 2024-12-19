@@ -1,5 +1,6 @@
 package com.barleyan.managementoko
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.barleyan.managementoko.adapters.CustomerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import android.app.AlertDialog
 import com.example.project.AppViewModel
 import com.example.project.Customer
 
