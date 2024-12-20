@@ -15,71 +15,76 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.example.project.AppViewModel
 import com.example.project.Transaction
 
+// Fragment untuk mengelola transaksi di aplikasi
 class TransactionFragment : Fragment() {
 
-    private lateinit var appViewModel: AppViewModel
-    private lateinit var transactionAdapter: TransactionAdapter
+    private lateinit var appViewModel: AppViewModel // ViewModel untuk menangani data transaksi
+    private lateinit var transactionAdapter: TransactionAdapter // Adapter untuk RecyclerView
 
+    // Fungsi untuk membuat tampilan fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // Inflate layout fragment_transaction
         return inflater.inflate(R.layout.fragment_transaction, container, false)
     }
 
+    // Fungsi untuk menyiapkan tampilan setelah fragment dibuat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize RecyclerView
+        // Inisialisasi RecyclerView untuk menampilkan daftar transaksi
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         setupRecyclerView(recyclerView)
 
-        // Initialize ViewModel
+        // Inisialisasi ViewModel
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
-        // Observe transaction data from ViewModel
+        // Mengamati data transaksi dari ViewModel
         appViewModel.allTransactions.observe(viewLifecycleOwner) { transactions ->
             transactions?.let {
-                transactionAdapter.submitList(it) // Update the adapter's list
+                transactionAdapter.submitList(it) // Memperbarui daftar transaksi pada adapter
             }
         }
 
-        // Setup FloatingActionButton for adding new transactions
+        // Menyiapkan FloatingActionButton untuk menambah transaksi baru
         val fabAdd: FloatingActionButton = view.findViewById(R.id.fabAdd)
         fabAdd.setOnClickListener {
-            showAddTransactionDialog()
+            showAddTransactionDialog() // Menampilkan dialog untuk menambah transaksi baru
         }
     }
 
+    // Fungsi untuk menyiapkan RecyclerView dengan GridLayoutManager dan adapter
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        // Use a GridLayoutManager with 2 columns
+        // Menggunakan GridLayoutManager dengan 2 kolom
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.layoutManager = gridLayoutManager
 
-        // Initialize the adapter and pass the context correctly
+        // Inisialisasi adapter dengan konteks dan handler untuk tombol delete dan edit
         transactionAdapter = TransactionAdapter(
-            requireContext(), // Pass the context here
+            requireContext(), // Mengirimkan konteks ke adapter
             onDelete = { transaction ->
-                appViewModel.deleteTransaction(transaction)
+                appViewModel.deleteTransaction(transaction) // Menghapus transaksi
                 Toast.makeText(requireContext(), "Transaksi ${transaction.productId} telah dihapus", Toast.LENGTH_SHORT).show()
             },
             onEdit = { transaction ->
-                showEditTransactionDialog(transaction)
+                showEditTransactionDialog(transaction) // Menampilkan dialog untuk mengedit transaksi
             }
         )
-        recyclerView.adapter = transactionAdapter
+        recyclerView.adapter = transactionAdapter // Menetapkan adapter pada RecyclerView
     }
 
+    // Fungsi untuk menampilkan dialog untuk menambah transaksi baru
     private fun showAddTransactionDialog() {
-        // Inflate the custom dialog view
+        // Menggunakan layout dialog custom
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_transaction, null)
         val productIDInput = dialogView.findViewById<EditText>(R.id.etProdukTransaction)
         val customerIDInput = dialogView.findViewById<EditText>(R.id.etCustomerID)
         val quantityIDInput = dialogView.findViewById<EditText>(R.id.etQuantityID)
         val totalPriceIDInput = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-        // Build the dialog
+        // Membangun dialog
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Tambah Transaksi")
             .setView(dialogView)
@@ -89,20 +94,21 @@ class TransactionFragment : Fragment() {
 
         dialog.show()
 
-        // Validate input before adding a transaction
+        // Validasi input sebelum menambah transaksi
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val productId = productIDInput.text.toString().trim()
             val customerId = customerIDInput.text.toString().trim()
             val quantity = quantityIDInput.text.toString().trim()
             val totalPrice = totalPriceIDInput.text.toString().trim()
 
+            // Jika input tidak kosong, buat transaksi baru
             if (productId.isNotEmpty() && customerId.isNotEmpty() && quantity.isNotEmpty()) {
                 val newTransaction = Transaction(
                     productId = productId, customerId = customerId, quantity = quantity, totalPrice = totalPrice)
-                appViewModel.insertTransaction(newTransaction)
-                dialog.dismiss()
+                appViewModel.insertTransaction(newTransaction) // Menambahkan transaksi ke ViewModel
+                dialog.dismiss() // Menutup dialog
             } else {
-                // Show error messages
+                // Menampilkan error jika input kosong
                 if (productId.isEmpty()) productIDInput.error = "ID Produk tidak boleh kosong"
                 if (customerId.isEmpty()) customerIDInput.error = "ID Customer tidak boleh kosong"
                 if (quantity.isEmpty()) quantityIDInput.error = "Quantity tidak boleh kosong"
@@ -110,6 +116,7 @@ class TransactionFragment : Fragment() {
         }
     }
 
+    // Fungsi untuk menampilkan dialog untuk mengedit transaksi yang ada
     private fun showEditTransactionDialog(transaction: Transaction) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Edit Transaksi")
@@ -123,7 +130,7 @@ class TransactionFragment : Fragment() {
         val editQuantity = dialogView.findViewById<EditText>(R.id.etQuantityID)
         val editTotalPrice = dialogView.findViewById<EditText>(R.id.etTotalPriceID)
 
-        // Pre-fill the fields with current transaction data
+        // Memasukkan data transaksi yang ada ke dalam field
         editProductId.setText(transaction.productId)
         editCustomerId.setText(transaction.customerId)
         editQuantity.setText(transaction.quantity)
@@ -135,14 +142,16 @@ class TransactionFragment : Fragment() {
             val newQuantity = editQuantity.text.toString().trim()
             val newTotalPrice = editTotalPrice.text.toString().trim()
 
+            // Validasi input sebelum memperbarui transaksi
             if (newProductId.isNotEmpty() && newCustomerId.isNotEmpty() && newQuantity.isNotEmpty()) {
                 transaction.productId = newProductId
                 transaction.customerId = newCustomerId
                 transaction.quantity = newQuantity
                 transaction.totalPrice = newTotalPrice
-                appViewModel.updateTransaction(transaction)
-                dialog.dismiss()
+                appViewModel.updateTransaction(transaction) // Memperbarui transaksi di ViewModel
+                dialog.dismiss() // Menutup dialog
             } else {
+                // Menampilkan error jika input kosong
                 if (newProductId.isEmpty()) editProductId.error = "ID Produk tidak boleh kosong"
                 if (newCustomerId.isEmpty()) editCustomerId.error = "ID Customer tidak boleh kosong"
                 if (newQuantity.isEmpty()) editQuantity.error = "Quantity tidak boleh kosong"
@@ -150,6 +159,6 @@ class TransactionFragment : Fragment() {
         }
 
         builder.setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
-        builder.show()
+        builder.show() // Menampilkan dialog
     }
 }
